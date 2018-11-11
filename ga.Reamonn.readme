@@ -1,0 +1,46 @@
+Okay, here it is.
+
+I cleaned out any files that are not relevant to tsp, which was mainly the
+tensor contraction stuff.
+
+This email has the code for direct representation & random keys. PGA had a
+separate codebase that I will send soon once I clean it up of non-tsp stuff
+as well.
+
+Some instructions for use:
+- compiles with the makefile
+
+- easiest way to run the code is to use the runs.py Python script, which
+can do multiple runs in a row with different mutation and crossover
+parameters. To run the C code directly use:
+"ga <params file> <opfiles file> <problem input file> <xover rate>
+<mutation rate> <xover operator> <mutation operator>"
+or with some example values:
+"ga params opfiles fx.tsp 0.8 0.01 uniform gaussian"
+
+- other parameters are set in the params file.
+    - Init_pop = 1: initialize population for Direct Integer Representation
+    - Init_pop = 2: initialize population for Random Keys
+- The implemented operators are:
+    - crossover: one-point, two-point, uniform, position,
+edge-recombination, and partially-mapped.
+    - mutation: uniform random, Gaussian random, displacement, insertion,
+and inversion.
+
+- the .tsp files are the input files that contain the list of city
+coordinates.
+
+- The 'opfiles' file determines which output files to create. 1 to create
+the file, 0 to not create it.
+
+- note that this code was not originally for tsp, it was modified to work
+on tsp and so some parameters may not make sense for a typical tsp (such as
+variable length chromosome) Also some of the comments in the params.default
+file are no longer accurate as they are from the original pre-modified code
+(such as Init_pop).
+
+I think that covers all the important info. Let me know if there's any
+questions. Also I'm not really a C programmer so I'm sure it's not exactly
+the most elegant C code.
+
+- Reamonn Norat

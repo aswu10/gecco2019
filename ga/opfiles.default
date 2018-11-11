@@ -1,0 +1,9 @@
+7
+# random always has to be first.  Rest of order doesn't matter
+random		1
+params		1
+genbest		1
+finalbest 	1
+runbest		1
+genstats	0
+lenstats	0

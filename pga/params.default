@@ -1,0 +1,95 @@
+###
+# this is a comment line
+Rerun			-1
+Run_num_file		run.num
+Output_path		Output
+# what the bases or nucleotides are:
+# binary, alphabet are current choices
+# 010308 add choice: multichar, xters specified in char string Xters
+Base			binary
+# only used if Base = multichar
+# specified xters of alphabet, max # different xters = INPUT_LINE_LEN
+# NOTE(010513AW): pairs of related letters must be next to each other - see
+# note in fxmatch.c
+Xters			01
+# initial population
+# Init_pop = -1: don't generate initial indvs
+#          =  0: initial indvs all 0's (Base = binary)
+#          =  1: initial indvs all 1's (Base = binary)
+#          =  2: initial indvs random binary numbers (Base = binary)
+#          =  3: read initial indvs from Init_pop_file
+#                (Base = binary,alphabet,multichar)
+#          =  4: initial indvs with random valid xters from alphabet
+#                (Base = alphabet,multichar)
+Init_pop		2
+Init_pop_file		pop.input
+# runtime parameters
+Max_num_gen		500
+Loop_until_find_opt	1
+Min_pct_opt		0.0
+Pop_size		200
+# Variable_gen_len 
+#    = 0: fixed gen len = Max_gen_len
+#    = 1: var gen len, init between Init_min_gen_len and Init_max_gen_len
+#    > 1: var gen len, init to Variable_gen_len
+Variable_gen_len	0
+Max_gen_len		40
+Min_gen_len		0
+Init_max_gen_len	0
+Init_min_gen_len	0
+# parsimony pressure (only effective if variable length, otherwise ignored)
+# 0 means no pressure, a value > 0 gives the length bias
+Parsimony_pressure	0
+# Xover_type: one-point, two-point, uniform, switch, homologous
+# switch xover -- switch parent source for each random_num < Uniform_x
+# uniform xover -- get from other parent for each random_num < Uniform_x
+# if uniform/switch, Uniform_x gives rate of change (range essentially 0-0.5)
+Xover_type		two-point
+Xover_rate		1.0
+Mut_rate		0.01
+Uniform_x		0.2
+# if homologous crossover, give homology window width
+Hx_window		5
+# until further notice %breeding and %bred are fixed at 1.0 (07.24.98.AW)
+Pct_breeding		1.0
+Pct_bred		1.0
+# parent selection can be proportional or tournament
+Parent_selection	tournament
+# selection parameters
+# selection without replacement doesn't really work right now -- don't use
+Parent_replacement_on	1
+Sigma_scaling_on	1
+Sigma_scale_min		0.0
+Sigma_scale_max		1.5
+Tournament_size		2
+# if we want to force the fitness of individuals
+# if Flat_fitness = 0, evaluate fitness of individuals like normal
+# if Flat_fitness > 0, assign that value as the fitness of all individuals
+Flat_fitness		0
+# about printing stuff to screen during run
+Print_params		1
+Print_function		1
+Print_pop		0
+Print_stats		0
+Print_best		0
+Print_fxn_best		1
+Print_targets		1
+#
+# saving data that won't fit in a single file -- data that must
+# be saved to directories of files.
+#
+# tracing run data
+# = 0 means don't trace
+# = 1 means regular trace and print to trace files
+# = 2 means trace but don't print to files.  This was added because
+#     in order to keep track of the cxn/dxn of RR bbs, need to keep
+#     trace of xover and mutation locations.  Both 1 and 2 will work
+#     for the RR bb record.
+Trace			0
+# character centers of gravity
+CoG			0
+# record the encoded values for each sub-length of individual
+# averages all values for each sub-length, thus prints genome_length
+# number of files to Coarse directory.
+#Coarse			0
+# one last comment

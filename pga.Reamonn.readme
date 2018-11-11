@@ -1,0 +1,31 @@
+And here's PGA.
+
+So this one is mostly the same setup with some exceptions:
+
+- One new parameter to set is the size of the chromosome. This is
+"Max_gen_len" in the params file.
+
+- There is a setting for variable length chromosome "Variable_gen_len", but
+I never used it so I don't know if it will work for tsp.
+
+- Again, this code was not originally for tsp and was modified to work on
+tsp.
+
+- there are multiple representation data types that can be used, but you'll
+want to use "integers", since it can support any number of cities/waypoints
+whereas "alphabet" is limited by the size of the alphabet. Integers is
+still pga, but it for example uses 2/-2 instead of B/b.
+
+- for some reason that I don't remember I did the xover operators
+differently here than in the other code, so here you set the xover operator
+in the params file.
+
+- there is only one mutation operator implemented
+
+- The results return as negative numbers, just remove the negative sign to
+get the actual result. Again, I don't remember why it's like this, I'd
+guess I did it as a quick and hacky fix due to the pga code being initially
+programmed as maximization.
+
+
+- Reamonn Norat

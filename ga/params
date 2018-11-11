@@ -1,0 +1,32 @@
+###
+# this is a comment line
+Rerun			-1
+Output_path		Output
+# starting and stopping
+Pop_size		500
+Init_pop		1
+Loop_until_find_opt	0
+Max_num_gen		1000
+Min_pct_opt		0.5
+# representation
+Variable_gen_len	0
+Max_gen_len		10
+Min_gen_len		10
+Hx_window		10
+Parsimony_pressure	0
+#reproduction
+Parent_selection	tournament
+Parent_replacement_on   1
+Tournament_size		4 
+Uniform_x		0.5
+# flat fitness
+Flat_fitness		0
+# output to screen
+Print_params		0
+Print_function		0
+Print_pop		    0
+Print_stats		    0
+Print_best		    1
+Print_fxn_best		0
+Scientific_notation 0
+
