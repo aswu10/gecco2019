@@ -58,6 +58,7 @@ int run_start()
    if (file_on("params"))
       {
       ptr = get_file_pointer("params");
+printf("run_start: %s\n", Output_file[ptr].filename);
       Output_file[ptr].fp = fopen(Output_file[ptr].filename, "a");
       print_params(Output_file[ptr].fp);
       fclose(Output_file[ptr].fp);

@@ -36,8 +36,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <unistd.h>
 #include "types.h"
 #include "extern.h"
+#include "google_call.h"
 #include "fxtsp.h"
 
 /* internal routine prototypes */
@@ -138,10 +140,32 @@ void end_function()
 */
 void eval_indv(INDIVIDUAL *indv)
    {
-   int i;
-   double distance;
+   int i, src, dest;
+   double distance, segment;
    FILE *fp;
    
+   static int init = 0;             // flag used to avoid reinitializing the matrix
+   static int google_count = 0;     // count of calls to the API
+   static double **dist_matrix;     // matrix of values from previous API calls
+    
+   if(!init)
+   {
+       // allocate space for the matix
+       dist_matrix = malloc(tsp.num_cities * sizeof(double*));
+       for(int i = 0; i < tsp.num_cities; i++)
+       {
+           dist_matrix[i] = malloc(tsp.num_cities * sizeof(double));
+       }
+
+       // initialize all elements to -1.0
+       for(int i = 0; i < tsp.num_cities; i++)
+       {
+           for(int j = 0; j < tsp.num_cities; j++)
+               dist_matrix[i][j] = -1.0;
+       }
+       init = 1;
+   }
+    
    /* decode if using random keys */
    if (Init_pop == 2)
       {
@@ -151,25 +175,74 @@ void eval_indv(INDIVIDUAL *indv)
   /* total distance traveled */
    distance = 0;
       
-   
-   // euclidean distance
+   // distance using Google API
    for (i = 0; i < indv->length; i++)
-      { 
+   { 
+      src = indv->genome[i];   
       COORDS *a = tsp.city_coordinates[indv->genome[i]];
       COORDS *b;
       if (i != indv->length-1) { 
          b = tsp.city_coordinates[indv->genome[i+1]];
+         dest = indv->genome[i+1];
       } else {
          // last item in chromosome is connected to first item
          b = tsp.city_coordinates[indv->genome[0]];
-      }
-           
-      distance += hypot(a->x - b->x, a->y - b->y);
+         dest = indv->genome[0];
       }
 
+      // usleep(200000);  // pause for 200ms
+       
+      // Before making a call to the API, check to see if there is
+      // a valid value in the matrix (matrix is intitialized to -1.0)
+      if(dist_matrix[src][dest] < 0.0)
+      {
+          double s[] = {a->lat, a->lon};
+          double d[] = {b->lat, b->lon};
+          segment = google_dist(s, d);
+          dist_matrix[src][dest] = segment;
+          google_count++;
+      }
+      else
+      {
+           segment = dist_matrix[src][dest];
+      }
+       
+      distance += segment;
+   }
+    
    indv->fitness = distance;
-   
-   }  /* eval_indv */
+}  /* eval_indv */
+
+
+/********** init_dist_matrix **********/
+/* parameters:	
+   called by:	ga_init(), ga.c
+   actions:	allocates space for the global distances matrix
+            which is defined in globals.h.
+   11.15.18 DM: Created function
+*/
+//double** init_dist_matrix()
+//{
+//    double **distances;
+//    printf("In init distance matrix\n");
+//    printf("   tsp.num_cities: %d\n", tsp.num_cities);
+//    distances = malloc(tsp.num_cities * sizeof(double*));
+//    printf("After first line\n");
+//    for(int i = 0; i < tsp.num_cities; i++)
+//    {
+//        distances[i] = malloc(tsp.num_cities * sizeof(double));
+//        printf("After an iteration of malloc loop\n");
+//    }
+//    
+//    for(int i = 0; i < tsp.num_cities; i++)
+//        for(int j = 0; j < tsp.num_cities; j++)
+//            distances[i][j] = -1.0;
+// 
+//    
+//printf("Leaving init distance matrix\n");        
+//    return distances;
+//}   /* init_dist_matrix */
+
 
 /********** found_solution **********/
 /* parameters:
@@ -346,7 +419,7 @@ int read_city_coordiantes(FILE *fp, char *aline)
          return ERROR;
          }  /* if */
          printf("%s", aline);
-      sscanf(aline, "%d %d", &tsp.city_coordinates[i]->x, &tsp.city_coordinates[i]->y);
+      sscanf(aline, "%lf %lf", &tsp.city_coordinates[i]->lat, &tsp.city_coordinates[i]->lon);
       i++;
       }  /* while */
    return OK;

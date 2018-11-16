@@ -64,8 +64,8 @@ typedef struct
 // Traveling Salesman   
 typedef struct
    {
-   int x;
-   int y;
+   double lat;
+   double lon;
    } COORDS;
 
 typedef struct 

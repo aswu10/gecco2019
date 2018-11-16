@@ -1,7 +1,7 @@
 CC = gcc
 #CFLAGS = -ansi -fullwarn -O
-LIBS = -lm -lc
-OFILES = main.o ga.o params.o output.o pop.o init.o random.o stats.o reproduce.o util.o genops.o indv.o build.o parse.o futil.o
+LIBS = -lm -lc -l python2.7
+OFILES = main.o ga.o params.o output.o pop.o init.o random.o stats.o reproduce.o util.o genops.o indv.o build.o parse.o futil.o google_call.o
 FXOFILES = fxtsp.o
 HFILES = types.h global.h extern.h
 
@@ -56,6 +56,9 @@ futil.o:	futil.c $(HFILES)
 fxtsp.o:    fxtsp.c fxtsp.h $(HFILES)
 	$(CC) $(CFLAGS) -c fxtsp.c 
 
-fxtc.o:	fxtc.c fxtc.h $(HFILES)
-	$(CC) $(CFLAGS) -c fxtc.c 
+google_call.o:	google_call.c $(HFILES)
+	$(CC) $(CFLAGS) -c google_call.c -I /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7
+
+#fxtc.o:	fxtc.c fxtc.h $(HFILES)
+#	$(CC) $(CFLAGS) -c fxtc.c 
     

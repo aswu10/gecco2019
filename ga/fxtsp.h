@@ -9,6 +9,7 @@ int read_fxn_file(char *fxn_file);
 int init_function();
 void end_function();
 void eval_indv(INDIVIDUAL *indv);
+// double** init_dist_matrix();
 int found_solution();
 void fprint_fxn(FILE *fp);
 void fprint_genes(FILE *fp, INDIVIDUAL *indv);

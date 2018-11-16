@@ -53,9 +53,9 @@ int crossover_pop()
       else if (!strcmp(Xover_type, "two-point"))
          for (i=0, j=0; i<num_pairs; i++, j+=2)
             twopt_crossover(Parents[j], Parents[j+1], Kids[j], Kids[j+1]);
-      else if (!strcmp(Xover_type, "uniform"))
+      else if (!strcmp(Xover_type, "uniform")) {
          for (i=0, j=0; i<num_pairs; i++, j+=2)
-            uniform_crossover(Parents[j], Parents[j+1], Kids[j], Kids[j+1]);
+            uniform_crossover(Parents[j], Parents[j+1], Kids[j], Kids[j+1]); }
       else if (!strcmp(Xover_type, "position"))
          for (i=0, j=0; i<num_pairs; i++, j+=2)
             position_based_crossover(Parents[j], Parents[j+1], Kids[j], Kids[j+1]);

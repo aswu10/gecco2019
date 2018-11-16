@@ -4,7 +4,7 @@ Rerun			-1
 Output_path		Output
 # starting and stopping
 Pop_size		500
-Init_pop		1
+Init_pop		2
 Loop_until_find_opt	0
 Max_num_gen		1000
 Min_pct_opt		0.5
@@ -28,5 +28,4 @@ Print_pop		    0
 Print_stats		    0
 Print_best		    1
 Print_fxn_best		0
-Scientific_notation 0
-
+Scientific_notation 	0

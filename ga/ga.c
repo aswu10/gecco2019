@@ -110,14 +110,18 @@ int ga_init(char *params_file, char *opfiles_file, char *fxn_file, double xover_
 
   /* initialize fitness function -- function specific routine */
    if (read_fxn_file(fxn_file) == ERROR)  return ERROR;
+
+  /* allocate space for distance matrix and initialize to -1.0 */
+  // distances = init_dist_matrix();
+    
    if (init_function() == ERROR)  return ERROR;
 
   /* initialize population */
    if (init_pop() == ERROR)  return ERROR;
-   
+
    if (Print_params)
       {
-      print_params(stdout);
+      // print_params(stdout);
       printf("\n");
       print_opfiles(stdout);
       printf("\n");
@@ -125,9 +129,10 @@ int ga_init(char *params_file, char *opfiles_file, char *fxn_file, double xover_
 
   /* initialize any stats for run */
    if (run_start() == ERROR)  return ERROR;
-
+    
   /* evaluate initial population */
    pop_eval();
+    
    if (Print_pop)
       {
       printf(" Current population (gen %d):\n", Gen.index);

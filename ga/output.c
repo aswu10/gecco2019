@@ -33,6 +33,7 @@
 */
 void print_params(FILE *fp)
    {
+    printf(" Run_num = %d\n", Run_num);
   /* things that were read in */
    fprintf(fp, " Run_num = %d\n", Run_num);
    fprintf(fp, " Seed = %ld\n", Seed);

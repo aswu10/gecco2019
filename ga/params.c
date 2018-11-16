@@ -75,7 +75,7 @@ int read_params(char *params_file)
    printf(" Reading from file: %s\n", params_file);
 
   /* allocate space for aline */
-   aline = (char *)malloc(INPUT_LINE_LEN * sizeof(char));
+   aline = (char *)malloc((INPUT_LINE_LEN+1) * sizeof(char));
 
    while (get_next_line(fp, aline) != ENDOFFILE)
       {

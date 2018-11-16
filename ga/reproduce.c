@@ -48,6 +48,7 @@ int reproduce()
 
   /* select parents */
    if (select_parents() == ERROR)  return ERROR;
+    
 #ifdef SMALLSTEP
    printf(" gen %d, after selecting parents.  Selected parents:\n",
                 Gen.index-1);
@@ -57,6 +58,7 @@ int reproduce()
 
   /* crossover */
    if (crossover_pop() == ERROR)  return ERROR;
+    
 #ifdef SMALLSTEP
    printf(" gen %d, after crossover.  Offspring:\n", Gen.index-1);
    print_population(Kids, 0, Pop_size-1);
@@ -65,6 +67,7 @@ int reproduce()
 
   /* mutate */
    mutate_pop();
+    
 #ifdef SMALLSTEP
    printf(" gen %d, after mutation.  Offspring (gen %d):\n",
 		Gen.index-1, Gen.index);

@@ -26,6 +26,7 @@ void remove_from_maps(int value, EDGE_MAP *maps, int length, int *unvisited, int
 
 
 void random_mutate(INDIVIDUAL *indv);
+void gaussian_mutate(INDIVIDUAL *indv);
 void displacement_mutate(INDIVIDUAL *indv, int start, int length, int invert, int per_gene);
 int homologous_crossover(INDIVIDUAL *parent1, INDIVIDUAL *parent2,
 			INDIVIDUAL *kid1, INDIVIDUAL *kid2);
