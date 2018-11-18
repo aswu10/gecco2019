@@ -151,16 +151,17 @@ void eval_indv(INDIVIDUAL *indv)
    if(!init)
    {
        // allocate space for the matix
-       dist_matrix = malloc(tsp.num_cities * sizeof(double*));
-       for(int i = 0; i < tsp.num_cities; i++)
+       // it is num_cities + 1) x (num_cities + 1) due to inclusion of origin
+       dist_matrix = malloc((tsp.num_cities + 1) * sizeof(double*));
+       for(int i = 0; i <= tsp.num_cities; i++)
        {
-           dist_matrix[i] = malloc(tsp.num_cities * sizeof(double));
+           dist_matrix[i] = malloc((tsp.num_cities + 1) * sizeof(double));
        }
 
        // initialize all elements to -1.0
-       for(int i = 0; i < tsp.num_cities; i++)
+       for(int i = 0; i <= tsp.num_cities; i++)
        {
-           for(int j = 0; j < tsp.num_cities; j++)
+           for(int j = 0; j <= tsp.num_cities; j++)
                dist_matrix[i][j] = -1.0;
        }
        init = 1;
@@ -172,23 +173,18 @@ void eval_indv(INDIVIDUAL *indv)
       decode(indv);
       }
    
-  /* total distance traveled */
+   /* total distance traveled */
    distance = 0;
-      
-   // distance using Google API
-   for (i = 0; i < indv->length; i++)
+
+   // calculate distance using Google API
+   // the loop calculates distances for lpcations in the genome
+   // distance to/from the origin are calcultaed after the loop
+   for (i = 0; i < indv->length - 1; i++)
    { 
-      src = indv->genome[i];   
-      COORDS *a = tsp.city_coordinates[indv->genome[i]];
-      COORDS *b;
-      if (i != indv->length-1) { 
-         b = tsp.city_coordinates[indv->genome[i+1]];
-         dest = indv->genome[i+1];
-      } else {
-         // last item in chromosome is connected to first item
-         b = tsp.city_coordinates[indv->genome[0]];
-         dest = indv->genome[0];
-      }
+      src = indv->genome[i];
+      dest = indv->genome[i+1];
+      COORDS *a = tsp.city_coordinates[src];
+      COORDS *b = tsp.city_coordinates[dest];
 
       // usleep(200000);  // pause for 200ms
        
@@ -209,6 +205,44 @@ void eval_indv(INDIVIDUAL *indv)
        
       distance += segment;
    }
+    
+   // Get distance from origin to first location
+   src = tsp.num_cities;
+   dest = indv->genome[0];
+   if(dist_matrix[src][dest] < 0.0)
+   {
+       COORDS *a = tsp.origin;
+       COORDS *b = tsp.city_coordinates[dest];
+       double s[] = {a->lat, a->lon};
+       double d[] = {b->lat, b->lon};
+       segment = google_dist(s, d);
+       dist_matrix[src][dest] = segment;
+       google_count++;
+   }
+   else
+   {
+       segment = dist_matrix[src][dest];
+   }
+   distance += segment;
+    
+   // get distance from last location back to origin
+   src = indv->genome[indv->length-1];
+   dest = tsp.num_cities;
+   if(dist_matrix[src][dest] < 0.0)
+   {
+       COORDS *a = tsp.city_coordinates[src];
+       COORDS *b = tsp.origin;
+       double s[] = {a->lat, a->lon};
+       double d[] = {b->lat, b->lon};
+       segment = google_dist(s, d);
+       dist_matrix[src][dest] = segment;
+       google_count++;
+   }
+   else
+   {
+       segment = dist_matrix[src][dest];
+   }
+   distance += segment;
     
    indv->fitness = distance;
 }  /* eval_indv */
@@ -379,6 +413,14 @@ int allocate_coords_space()
    printf(" ---in allocate_coords_space---\n");
 #endif
    
+   tsp.origin = (COORDS *)malloc(sizeof(COORDS));
+    
+   if (tsp.origin == NULL)
+      {
+      printf(" Error(allocate_coords_space): cannot allocate: tsp.origin\n");
+      return ERROR;
+      }
+
    tsp.city_coordinates = (COORDS **)malloc(tsp.num_cities * sizeof(COORDS *));
    int i;
    for (i = 0; i < tsp.num_cities; i++)
@@ -391,7 +433,7 @@ int allocate_coords_space()
       printf(" Error(allocate_coords_space): cannot allocate: tsp.city_coordinate\n");
       return ERROR;
       }
-            
+
 #ifdef DEBUG
    printf(" ---end allocate_coords_space---\n");
 #endif
@@ -410,6 +452,16 @@ int read_city_coordiantes(FILE *fp, char *aline)
    {
    int i;
 
+   // get the designated start/end location
+   if (get_next_line(fp, aline) == ENDOFFILE)
+   {
+       printf(" Error(read_city_coordiantes): unexpected end of file\n");
+       return ERROR;
+   }  /* if */
+   printf("%s", aline);
+   sscanf(aline, "%lf %lf", &tsp.origin->lat, &tsp.origin->lon);
+
+   // get the remaining locations
    i = 0;
    while (i < tsp.num_cities)
       {
