@@ -165,6 +165,7 @@ void eval_indv(INDIVIDUAL *indv)
                dist_matrix[i][j] = -1.0;
        }
        init = 1;
+       printf("Distance matrix allocated\n");
    }
     
    /* decode if using random keys */
@@ -186,14 +187,16 @@ void eval_indv(INDIVIDUAL *indv)
       COORDS *a = tsp.city_coordinates[src];
       COORDS *b = tsp.city_coordinates[dest];
 
-      // usleep(200000);  // pause for 200ms
-       
       // Before making a call to the API, check to see if there is
       // a valid value in the matrix (matrix is intitialized to -1.0)
       if(dist_matrix[src][dest] < 0.0)
       {
+          // usleep(100000);  // pause for 10ms to keep calls/sec low
+       
           double s[] = {a->lat, a->lon};
           double d[] = {b->lat, b->lon};
+printf("google_count: %d\n", google_count);
+printf("%d -> %d google call: (%f, %f)  (%f, %f)\n", i, i+1, a->lat, a->lon, b->lat, b->lon);
           segment = google_dist(s, d);
           dist_matrix[src][dest] = segment;
           google_count++;
@@ -215,6 +218,8 @@ void eval_indv(INDIVIDUAL *indv)
        COORDS *b = tsp.city_coordinates[dest];
        double s[] = {a->lat, a->lon};
        double d[] = {b->lat, b->lon};
+printf("google_count: %d\n", google_count);
+printf("origin -> 0 google call: (%f, %f)  (%f, %f)\n", a->lat, a->lon, b->lat, b->lon);
        segment = google_dist(s, d);
        dist_matrix[src][dest] = segment;
        google_count++;
@@ -234,6 +239,8 @@ void eval_indv(INDIVIDUAL *indv)
        COORDS *b = tsp.origin;
        double s[] = {a->lat, a->lon};
        double d[] = {b->lat, b->lon};
+printf("google_count: %d\n", google_count);
+printf("last -> origin google call: (%f, %f)  (%f, %f)\n", a->lat, a->lon, b->lat, b->lon);
        segment = google_dist(s, d);
        dist_matrix[src][dest] = segment;
        google_count++;
@@ -243,6 +250,7 @@ void eval_indv(INDIVIDUAL *indv)
        segment = dist_matrix[src][dest];
    }
    distance += segment;
+// printf("\n");
     
    indv->fitness = distance;
 }  /* eval_indv */

@@ -7,6 +7,7 @@
 #
 
 import googlemaps
+import time
 
 #
 # Parameters:
@@ -54,10 +55,22 @@ def gmap_dist(source_arg, dest_arg):
     # create the Google maps object
     gmaps = googlemaps.Client(key='AIzaSyB15mb3E_OKrw-eXP_E8Pv1L9xpxRTJjIs')
 
+    print("Python: about to call maps API")
+    print("  sources: {}".format(sources))
+    print("  dests: {}".format(dests))
+    
     # call the gmaps distance matrix function
     # the returned result is a JSON object
     distance_result = gmaps.distance_matrix(sources, dests)
-
+    
+    print("Python: after call to maps API")
+    print("status: {}".format(distance_result['status']))
+    attempts = 1
+    while (distance_result['status'] != 'OK') and (attempts < 5):
+        time.sleep(1)
+        distance_result = gmaps.distance_matrix(sources, dests)
+        attempts += 1
+        
     # This is a JSON result returned by an earlier call
     # It is included here for testing purposes to reduce calls
     # made to the API
@@ -85,6 +98,11 @@ def gmap_dist(source_arg, dest_arg):
             time[k] = distance_result['rows'][i]['elements'][j]['duration']['value']
             k += 1
 
+    # memory cleanup
+    # del sources
+    # del dests
+    # del distance_result
+    
     # return a Python list object containing
     # the list of distance and list of times
     return [dist, time]

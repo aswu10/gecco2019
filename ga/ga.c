@@ -42,7 +42,7 @@ int ga_start(char *params_file, char *opfiles_file, char *fxn_file, double xover
       printf(" Error(ga): ga_init ends on error.\n");
       return ERROR;
       }
-
+printf("After ga_init\n");
    error = ga_loop();
    if (error == ERROR)
       {

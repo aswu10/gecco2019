@@ -4,7 +4,7 @@ Num_cities 55
 # GPS coordinates (lat, lon) for destinations in Onalaska -- first is UPS depot
 43.858740	-91.227836
 43.896293	-91.131786
-43.882761	-91.209010
+43.882761   -91.209010
 43.889699	-91.185435
 43.868092   -91.156231
 43.881331	-91.211248

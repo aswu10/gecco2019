@@ -17,6 +17,7 @@
  */
 
 #include<stdio.h>
+#include<unistd.h>
 #include<Python.h>
 
 double google_dist(double source[2], double dest[2])
@@ -93,6 +94,7 @@ double google_dist(double source[2], double dest[2])
     // check if the function is callable
     if(PyCallable_Check(pFunc))
     {
+        usleep(10000);
         // call the function and save the returned object in pValue
         // pValue is a Python list containing 2 Python lists
         pValue = PyObject_CallObject(pFunc, pArgs);
@@ -104,6 +106,7 @@ double google_dist(double source[2], double dest[2])
             py_dists = PyList_GET_ITEM(pValue, 0);
             py_times = PyList_GET_ITEM(pValue, 1);
 
+            printf("google.c: got dists and times from Python\n");
             // extract results from the Python lists and store in C arrays
             for(int i = 0; i < result_num; i++)
             {
