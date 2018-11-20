@@ -71,7 +71,6 @@ typedef struct
 typedef struct 
    {
    int num_cities;
-   COORDS *origin;
    COORDS **city_coordinates;
    } TSP;
 
