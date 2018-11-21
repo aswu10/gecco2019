@@ -54,17 +54,11 @@ def gmap_dist(source_arg, dest_arg):
     
     # create the Google maps object
     gmaps = googlemaps.Client(key='AIzaSyB15mb3E_OKrw-eXP_E8Pv1L9xpxRTJjIs')
-
-    print("Python: about to call maps API")
-    print("  sources: {}".format(sources))
-    print("  dests: {}".format(dests))
     
     # call the gmaps distance matrix function
     # the returned result is a JSON object
     distance_result = gmaps.distance_matrix(sources, dests)
     
-    print("Python: after call to maps API")
-    print("status: {}".format(distance_result['status']))
     attempts = 1
     while (distance_result['status'] != 'OK') and (attempts < 5):
         time.sleep(1)

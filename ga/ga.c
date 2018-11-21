@@ -42,7 +42,7 @@ int ga_start(char *params_file, char *opfiles_file, char *fxn_file, double xover
       printf(" Error(ga): ga_init ends on error.\n");
       return ERROR;
       }
-printf("After ga_init\n");
+
    error = ga_loop();
    if (error == ERROR)
       {
@@ -114,7 +114,7 @@ int ga_init(char *params_file, char *opfiles_file, char *fxn_file, double xover_
   /* allocate space for distance matrix and initialize to -1.0 */
   // distances = init_dist_matrix();
     
-   if (init_function() == ERROR)  return ERROR;
+   if (init_function(fxn_file) == ERROR)  return ERROR;
 
   /* initialize population */
    if (init_pop() == ERROR)  return ERROR;

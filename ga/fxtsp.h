@@ -6,7 +6,7 @@
 
 /* prototypes */
 int read_fxn_file(char *fxn_file);
-int init_function();
+int init_function(char *fxn_file);
 void end_function();
 void eval_indv(INDIVIDUAL *indv);
 // double** init_dist_matrix();

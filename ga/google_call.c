@@ -110,7 +110,6 @@ double google_dist(double source[2], double dest[2])
             py_dists = PyList_GET_ITEM(pValue, 0);
             py_times = PyList_GET_ITEM(pValue, 1);
 
-            printf("google.c: got dists and times from Python\n");
             // extract results from the Python lists and store in C arrays
             for(int i = 0; i < result_num; i++)
             {
@@ -122,7 +121,7 @@ double google_dist(double source[2], double dest[2])
 //            Py_DECREF(py_times);
         }
         else
-            printf("pValue is NULL\n");
+            printf("google_dist: pValue is NULL\n");
     }
     else
     {
