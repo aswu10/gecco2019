@@ -42,6 +42,9 @@
 #include "google_call.h"
 #include "fxtsp.h"
 
+#include<Python.h>
+
+
 /* internal routine prototypes */
 int allocate_coords_space();
 int compare(const void *left, const void *right);
@@ -106,6 +109,9 @@ int init_function()
 #ifdef DEBUG
    printf(" ---in init_function---\n");
 #endif
+    
+    // required by the C Python library
+    Py_Initialize();
 
 #ifdef DEBUG
    printf(" ---end init_function---\n");
@@ -124,6 +130,8 @@ void end_function()
    printf(" ---in end_function---\n");
 #endif
  
+   Py_Finalize();
+    
    printf(" Finalizing function: %s\n", Function_name);
  
 #ifdef DEBUG
@@ -198,6 +206,7 @@ void eval_indv(INDIVIDUAL *indv)
 printf("google_count: %d\n", google_count);
 printf("%d -> %d google call: (%f, %f)  (%f, %f)\n", i, i+1, a->lat, a->lon, b->lat, b->lon);
           segment = google_dist(s, d);
+printf("%d -> %d distance: %f\n\n", src, dest, segment);
           dist_matrix[src][dest] = segment;
           google_count++;
       }

@@ -20,10 +20,14 @@
 #include<unistd.h>
 #include<Python.h>
 
+PyObject *pName, *pModule, *pFunc, *pDict, *pValue, *pArgs, *dTuple, *sTuple;
+PyObject *py_dists, *py_times;
+
+
 double google_dist(double source[2], double dest[2])
 {    
     // create the Python objects needed for function call and parameters
-    PyObject *pName, *pModule, *pFunc, *pDict, *pValue, *pArgs, *dTuple, *sTuple;
+    // PyObject *pName, *pModule, *pFunc, *pDict, *pValue, *pArgs, *dTuple, *sTuple;
 
     // Because C doesn't provide a function to determine the number of elements
     // in an array, we use sizeof to dtermine this.
@@ -49,7 +53,7 @@ double google_dist(double source[2], double dest[2])
     double times[result_num];
     
     // required by the C Python library
-    Py_Initialize();
+    // Py_Initialize();
 
     // pArgs is passed as argument to gmaps_dist
     // it is s tuple of two tuples:
@@ -102,7 +106,7 @@ double google_dist(double source[2], double dest[2])
         if(pValue != NULL)
         {
             // get the two Python lists from pValue
-            PyObject *py_dists, *py_times;
+            // PyObject *py_dists, *py_times;
             py_dists = PyList_GET_ITEM(pValue, 0);
             py_times = PyList_GET_ITEM(pValue, 1);
 
@@ -114,8 +118,8 @@ double google_dist(double source[2], double dest[2])
                 times[i] = (double)PyInt_AsLong(PyList_GET_ITEM(py_times, i));
             }
             
-            Py_DECREF(py_dists);
-            Py_DECREF(py_times);
+//            Py_DECREF(py_dists);
+//            Py_DECREF(py_times);
         }
         else
             printf("pValue is NULL\n");
@@ -125,11 +129,11 @@ double google_dist(double source[2], double dest[2])
         PyErr_Print();
     }
 
-    Py_DECREF(pModule);
-    Py_DECREF(pName);
-    Py_DECREF(pArgs);
-    Py_DECREF(sTuple);
-    Py_DECREF(dTuple);
+//    Py_DECREF(pModule);
+//    Py_DECREF(pName);
+//    Py_DECREF(pArgs);
+//    Py_DECREF(sTuple);
+//    Py_DECREF(dTuple);
 
     // Py_Finalize();
     
