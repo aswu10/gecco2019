@@ -44,10 +44,16 @@
 
 #include<Python.h>
 
+/* file scope object */
+static double **dist_matrix;     // matrix of values from previous API calls
+
 
 /* internal routine prototypes */
 int allocate_coords_space();
 int compare(const void *left, const void *right);
+int init_matrix();
+int free_matrix();
+int write_matrix();
 
 /********** read_fxn_file **********/
 /* parameters:
@@ -99,6 +105,63 @@ int read_fxn_file(char *fxn_file)
    return OK;
    }  /* read_fxn_file */
 
+
+/********** init_matrix ************/
+/* parameters:
+   called by:   init_function(), fxtsp.c
+   actions:     allocate space for and initialize dist_matrix
+*/
+int init_matrix()
+{
+   // allocate space for the matix
+   // it is num_cities + 1) x (num_cities + 1) due to inclusion of origin
+   dist_matrix = malloc((tsp.num_cities + 1) * sizeof(double*));
+   for(int i = 0; i <= tsp.num_cities; i++)
+   {
+       dist_matrix[i] = malloc((tsp.num_cities + 1) * sizeof(double));
+   }
+
+   // initialize all elements to -1.0
+   for(int i = 0; i <= tsp.num_cities; i++)
+   {
+       for(int j = 0; j <= tsp.num_cities; j++)
+           dist_matrix[i][j] = -1.0;
+   }
+   printf("Distance matrix allocated\n");
+
+   return OK;
+}
+
+
+/********** free_matrix ************/
+/* parameters:
+   called by: end_function(), fxtsp.c
+   actions: deallocate the dist_matrix
+*/
+int free_matrix()
+{
+    for(int i = 0; i < tsp.num_cities; i++)
+    {
+        free(dist_matrix[i]);
+    }
+    free(dist_matrix);
+    
+    return OK;
+}
+
+
+/********** write_matrix ***********/
+/* parameters:
+   called by: end_function(), fxtsp.c
+   actions: Write the dist_matrix to a file
+            for use in later runs
+*/
+int write_matrix()
+{
+    
+}
+
+
 /********** init_function **********/
 /* parameters:
    called by:	ga_init(), ga.c
@@ -112,6 +175,9 @@ int init_function()
     
     // required by the C Python library
     Py_Initialize();
+    
+    // create and initialize the distance matrix
+    init_matrix();
 
 #ifdef DEBUG
    printf(" ---end init_function---\n");
@@ -130,10 +196,13 @@ void end_function()
    printf(" ---in end_function---\n");
 #endif
  
+   printf(" Finalizing function: %s\n", Function_name);
+
    Py_Finalize();
     
-   printf(" Finalizing function: %s\n", Function_name);
- 
+   // deallocate the distance_matrix
+   free_matrix();
+    
 #ifdef DEBUG
    printf(" ---end end_function---\n");
 #endif
@@ -152,29 +221,9 @@ void eval_indv(INDIVIDUAL *indv)
    double distance, segment;
    FILE *fp;
    
-   static int init = 0;             // flag used to avoid reinitializing the matrix
+   // static int init = 0;             // flag used to avoid reinitializing the matrix
    static int google_count = 0;     // count of calls to the API
-   static double **dist_matrix;     // matrix of values from previous API calls
-    
-   if(!init)
-   {
-       // allocate space for the matix
-       // it is num_cities + 1) x (num_cities + 1) due to inclusion of origin
-       dist_matrix = malloc((tsp.num_cities + 1) * sizeof(double*));
-       for(int i = 0; i <= tsp.num_cities; i++)
-       {
-           dist_matrix[i] = malloc((tsp.num_cities + 1) * sizeof(double));
-       }
-
-       // initialize all elements to -1.0
-       for(int i = 0; i <= tsp.num_cities; i++)
-       {
-           for(int j = 0; j <= tsp.num_cities; j++)
-               dist_matrix[i][j] = -1.0;
-       }
-       init = 1;
-       printf("Distance matrix allocated\n");
-   }
+   // static double **dist_matrix;     // matrix of values from previous API calls
     
    /* decode if using random keys */
    if (Init_pop == 2)
@@ -204,7 +253,7 @@ void eval_indv(INDIVIDUAL *indv)
           double s[] = {a->lat, a->lon};
           double d[] = {b->lat, b->lon};
 printf("google_count: %d\n", google_count);
-printf("%d -> %d google call: (%f, %f)  (%f, %f)\n", i, i+1, a->lat, a->lon, b->lat, b->lon);
+printf("%d -> %d google call: (%f, %f)  (%f, %f)\n", src, dest, a->lat, a->lon, b->lat, b->lon);
           segment = google_dist(s, d);
 printf("%d -> %d distance: %f\n\n", src, dest, segment);
           dist_matrix[src][dest] = segment;
