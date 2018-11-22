@@ -355,7 +355,7 @@ void run_output()
       {
       Output_file[get_file_pointer("runbest")].fp = fopen(
 		Output_file[get_file_pointer("runbest")].filename, "a");
-        printf("run_best: %d", Run_best_indv->index);
+        printf("run_best: %d\n", Run_best_indv->index);
       fprint_individual(Output_file[get_file_pointer("runbest")].fp, Run_best_indv, 100);
       fclose(Output_file[get_file_pointer("runbest")].fp);
       }  /* if runbest */
