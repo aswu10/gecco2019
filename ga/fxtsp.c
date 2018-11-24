@@ -47,6 +47,7 @@
 /* file scope object */
 static double **dist_matrix;    // matrix of values from previous API calls
 static char *matrix_file;       // file for reading/writing distance matrix information
+static int matrix_changed = 0;  // flag checked before writing dist_matrix to file
 
 
 /* internal routine prototypes */
@@ -247,7 +248,6 @@ int write_matrix()
       return ERROR;       
    }
     
-   printf("wrote dist_matrix to file\n");
    return OK;
 }
 
@@ -264,13 +264,14 @@ int init_function(char *fxn_file)
     
     // required by the C Python library
     Py_Initialize();
+    printf("   completed Py_Initialize\n");
     
     // make matrix filename from fxn_file
     make_matrix_filename(fxn_file);
     
     // create and initialize the distance matrix
     init_matrix();
-    printf("init_function: init_matrix completed\n");
+    printf("   initialized dist_matrix\n");
 
 #ifdef DEBUG
    printf(" ---end init_function---\n");
@@ -289,15 +290,26 @@ void end_function()
    printf(" ---in end_function---\n");
 #endif
  
-   printf(" Finalizing function: %s\n", Function_name);
+   printf("Finalizing function: %s\n", Function_name);
 
+   // cleanup memory used by the Python module
    Py_Finalize();
+   printf("   completed Py_Finalize\n");
     
    // write the dist_matrix to a file
-   write_matrix();
+   if(matrix_changed)
+   {
+       write_matrix();
+       printf("   wrote dist_matrix to file\n");
+   }
+   else
+   {
+       printf("   dist_matrix unchanged\n");
+   }
     
    // deallocate the dist_matrix
    free_matrix();
+   printf("   deallocated dist_matrix\n\n");
     
 #ifdef DEBUG
    printf(" ---end end_function---\n");
@@ -354,6 +366,7 @@ void eval_indv(INDIVIDUAL *indv)
           printf("%d -> %d distance: %f\n\n", src, dest, segment);
           dist_matrix[src][dest] = segment;
           google_count++;
+          matrix_changed = 1;
       }
       else
       {
@@ -378,6 +391,7 @@ void eval_indv(INDIVIDUAL *indv)
        printf("origin -> %d distance: %f\n\n", dest, segment);
        dist_matrix[src][dest] = segment;
        google_count++;
+       matrix_changed = 1;
    }
    else
    {
@@ -400,6 +414,7 @@ void eval_indv(INDIVIDUAL *indv)
        printf("%d -> origin distance: %f\n\n", src, segment);
        dist_matrix[src][dest] = segment;
        google_count++;
+       matrix_changed = 1;
    }
    else
    {
