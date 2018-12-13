@@ -150,7 +150,7 @@ int init_matrix()
    {
        dist_matrix[i] = malloc((tsp.num_cities + 1) * sizeof(double));
    }
-   printf("dist_matrix allocated\n");
+   printf("      dist_matrix allocated\n");
 
    // if the matrix_file exists, read distance data from it
    // if it doesn't exist, initialize the matrix to -1.0
@@ -175,7 +175,7 @@ int init_matrix()
         
         fclose(fp);
         free(mline);
-        printf("dist_matrix read from file\n");
+        printf("      dist_matrix read from file\n");
    }
    else
    {
@@ -185,7 +185,7 @@ int init_matrix()
            for(int j = 0; j <= tsp.num_cities; j++)
                dist_matrix[i][j] = -1.0;
        }
-       printf("Distance matrix initialized to -1.0\n");
+       printf("      dist_matrix initialized to -1.0\n");
    }
 
 //    printf("Distance Matrix:\n");
@@ -262,6 +262,8 @@ int init_function(char *fxn_file)
    printf(" ---in init_function---\n");
 #endif
     
+    printf("Initializing function: %s\n", Function_name);
+
     // required by the C Python library
     Py_Initialize();
     printf("   completed Py_Initialize\n");
@@ -271,7 +273,7 @@ int init_function(char *fxn_file)
     
     // create and initialize the distance matrix
     init_matrix();
-    printf("   initialized dist_matrix\n");
+    printf("   created dist_matrix\n");
 
 #ifdef DEBUG
    printf(" ---end init_function---\n");
@@ -356,8 +358,6 @@ void eval_indv(INDIVIDUAL *indv)
       // a valid value in the matrix (matrix is intitialized to -1.0)
       if(dist_matrix[src][dest] < 0.0)
       {
-          // usleep(100000);  // pause for 10ms to keep calls/sec low
-       
           double s[] = {a->lat, a->lon};
           double d[] = {b->lat, b->lon};
           printf("google_count: %d\n", google_count);

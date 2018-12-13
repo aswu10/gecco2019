@@ -225,7 +225,7 @@ void fprint_individual(FILE *fp, INDIVIDUAL *indv, int gen)
 		indv->parent1_index, indv->parent2_index);   
    } else {
    fprintf(fp, " G %3d I %3d L %3d F %8.3lf %8.3lf (%3d, %3d) ",
-		gen, indv->index, indv->length,
+		indv->gen, indv->index, indv->length,
 		indv->fitness, indv->calc_num_offspring,
 		indv->parent1_index, indv->parent2_index);
    }
@@ -355,7 +355,7 @@ void run_output()
       {
       Output_file[get_file_pointer("runbest")].fp = fopen(
 		Output_file[get_file_pointer("runbest")].filename, "a");
-        printf("\nrun_best: %d\n\n", Run_best_indv->index);
+        printf("\nrun_best: I %d  F %.3f\n\n", Run_best_indv->index, Run_best_indv->fitness);
       fprint_individual(Output_file[get_file_pointer("runbest")].fp, Run_best_indv, 100);
       fclose(Output_file[get_file_pointer("runbest")].fp);
       }  /* if runbest */

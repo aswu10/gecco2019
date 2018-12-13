@@ -25,7 +25,7 @@ PyObject *py_dists, *py_times;
 
 
 double google_dist(double source[2], double dest[2])
-{    
+{        
     // create the Python objects needed for function call and parameters
     // PyObject *pName, *pModule, *pFunc, *pDict, *pValue, *pArgs, *dTuple, *sTuple;
 
@@ -77,7 +77,7 @@ double google_dist(double source[2], double dest[2])
     {
         pValue = PyFloat_FromDouble(dest[i]);
         PyTuple_SetItem(dTuple, i, pValue);
-    }
+    }    
     
     // add sTuple and dTuple to pArgs
     PyTuple_SetItem(pArgs, 0, sTuple);
@@ -85,20 +85,22 @@ double google_dist(double source[2], double dest[2])
     
     // create Python string with name of Python code file
     pName = PyString_FromString("google_func");
-
+    
     // pModule is a reference to the imported source code file
     pModule = PyImport_Import(pName);
     
     // creates a dictionary of data about the imported module
     pDict = PyModule_GetDict(pModule);
-
+    
     // get reference to the function gmap_dist from the dictionary
     pFunc = PyDict_GetItemString(pDict, "gmap_dist");
     
     // check if the function is callable
     if(PyCallable_Check(pFunc))
     {
+        // sleep for 10000 usecs (10 ms) to keep calls/sec low
         usleep(10000);
+        
         // call the function and save the returned object in pValue
         // pValue is a Python list containing 2 Python lists
         pValue = PyObject_CallObject(pFunc, pArgs);
@@ -115,26 +117,15 @@ double google_dist(double source[2], double dest[2])
             {
                 dists[i] = (double)PyInt_AsLong(PyList_GET_ITEM(py_dists, i));
                 times[i] = (double)PyInt_AsLong(PyList_GET_ITEM(py_times, i));
-            }
-            
-//            Py_DECREF(py_dists);
-//            Py_DECREF(py_times);
+            }            
         }
         else
             printf("google_dist: pValue is NULL\n");
     }
     else
     {
-        PyErr_Print();
+         PyErr_Print();
     }
-
-//    Py_DECREF(pModule);
-//    Py_DECREF(pName);
-//    Py_DECREF(pArgs);
-//    Py_DECREF(sTuple);
-//    Py_DECREF(dTuple);
-
-    // Py_Finalize();
     
     return dists[0];
 }

@@ -54,7 +54,7 @@ futil.o:	futil.c $(HFILES)
 	$(CC) $(CFLAGS) -c futil.c
 
 fxtsp.o:    fxtsp.c fxtsp.h $(HFILES)
-	$(CC) $(CFLAGS) -c fxtsp.c 
+	$(CC) $(CFLAGS) -c fxtsp.c -I /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7
 
 google_call.o:	google_call.c $(HFILES)
 	$(CC) $(CFLAGS) -c google_call.c -I /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7
