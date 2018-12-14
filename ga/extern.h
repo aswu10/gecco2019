@@ -31,6 +31,7 @@ extern int Sigma_scaling_on;
 extern double Sigma_scale_min;
 extern double Sigma_scale_max;
 extern int Tournament_size;
+extern double Gaussian_sd;
 extern double Flat_fitness;
 extern int Init_pop;
 extern char *Init_pop_file;

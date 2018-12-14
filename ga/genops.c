@@ -1034,7 +1034,7 @@ void gaussian_mutate(INDIVIDUAL *indv)
       else // random keys
          {
              // printf("origingal value: %.2lf", indv->floats_genome[random_num]);
-         double value = gaussian(indv->floats_genome[random_num], 0.25);
+         double value = gaussian(indv->floats_genome[random_num], Gaussian_sd);
          if (value > 1.0) 
             {
             value = 1.0;

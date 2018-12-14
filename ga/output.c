@@ -144,7 +144,8 @@ void fprint_genome(FILE *fp, INDIVIDUAL *indv, int endofline)
    {
        // print as node pairs instead of edge #
        // EDGE *edge = tensor.edges[indv->genome[i]];
-       // fprintf(fp, "(%d %d) ", edge->node_a, edge->node_b); 
+       // fprintf(fp, "(%d %d) ", edge->node_a, edge->node_b);
+       fprintf(fp, "%d ",indv->genome[i]);
    }
    if (endofline)  putc('\n', fp);
    }  /* fprint_genome */
@@ -230,8 +231,7 @@ void fprint_individual(FILE *fp, INDIVIDUAL *indv, int gen)
 		indv->parent1_index, indv->parent2_index);
    }
 	   
-   
-   // fprint_genome(fp, indv, 1);
+   fprint_genome(fp, indv, 1);
    }  /* fprint_individual */
 
 /********** print_gen_best **********/
@@ -355,8 +355,8 @@ void run_output()
       {
       Output_file[get_file_pointer("runbest")].fp = fopen(
 		Output_file[get_file_pointer("runbest")].filename, "a");
-        printf("\nrun_best: I %d  F %.3f\n\n", Run_best_indv->index, Run_best_indv->fitness);
-      fprint_individual(Output_file[get_file_pointer("runbest")].fp, Run_best_indv, 100);
+        printf("\nrun_best: I %d  G %d  F %.3f\n\n", Run_best_indv->index, Run_best_indv->gen, Run_best_indv->fitness);
+      fprint_individual(Output_file[get_file_pointer("runbest")].fp, Run_best_indv, Run_best_indv->gen);
       fclose(Output_file[get_file_pointer("runbest")].fp);
       }  /* if runbest */
    if (file_on("finalbest"))

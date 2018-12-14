@@ -165,6 +165,7 @@ int set_param(char *aline)
 		sscanf(temp, "%lf", &Sigma_scale_max);
    else if (!strcmp(name, "Tournament_size"))
 		sscanf(temp, "%d", &Tournament_size);
+   else if (!strcmp(name, "Gaussian_sd")) sscanf(temp, "%lf", &Gaussian_sd);
    else if (!strcmp(name, "Flat_fitness")) sscanf(temp, "%lf", &Flat_fitness);
    else if (!strcmp(name, "Init_pop"))  sscanf(temp, "%d", &Init_pop);
    else if (!strcmp(name, "Init_pop_file"))  sscanf(temp, "%s", Init_pop_file);

@@ -44,6 +44,8 @@ double Sigma_scale_min;		/* min expected offspring if Sigma_scaling on */
 double Sigma_scale_max;		/* max expected offspring if Sigma_scaling on */
 int Tournament_size;		/* if tournament selection */
 
+double Gaussian_sd;         /* standard deviation for Gaussian mutation */
+
 double Flat_fitness;		/* if = 0, eval indvs as usual 
 				   if > 0, assign all indvs that fitness val */
 

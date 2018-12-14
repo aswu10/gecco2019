@@ -6,7 +6,7 @@ Output_path		Output
 Pop_size		500
 Init_pop		2
 Loop_until_find_opt	0
-Max_num_gen		1000
+Max_num_gen		50000
 Min_pct_opt		0.5
 # representation
 Variable_gen_len	0
@@ -17,8 +17,10 @@ Parsimony_pressure	0
 #reproduction
 Parent_selection	tournament
 Parent_replacement_on   1
-Tournament_size		4 
+Tournament_size		2 
 Uniform_x		0.5
+#mutation
+Gaussian_sd     0.15
 # flat fitness
 Flat_fitness		0
 # output to screen
