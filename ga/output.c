@@ -55,6 +55,7 @@ void print_params(FILE *fp)
    fprintf(fp, " Xover_rate = %lf\n", Xover_rate);
    fprintf(fp, " Mut_type = %s\n", Mut_type);
    fprintf(fp, " Mut_rate = %lf\n", Mut_rate);
+   fprintf(fp, " Gaussian_sd = %lf\n", Gaussian_sd);
    fprintf(fp, " Uniform_x = %lf\n", Uniform_x);
    fprintf(fp, " Pct_breeding = %lf\n", Pct_breeding);
    fprintf(fp, " Pct_bred = %lf\n", Pct_bred);
