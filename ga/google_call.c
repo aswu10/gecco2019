@@ -23,7 +23,7 @@
 PyObject *pName, *pModule, *pFunc, *pDict, *pValue, *pArgs, *dTuple, *sTuple;
 PyObject *py_dists, *py_times;
 
-double google_dist(double source[2], double dest[2], double* result)
+void google_dist(double source[2], double dest[2], double* result)
 {        
     // create the Python objects needed for function call and parameters
     // PyObject *pName, *pModule, *pFunc, *pDict, *pValue, *pArgs, *dTuple, *sTuple;
@@ -121,7 +121,6 @@ double google_dist(double source[2], double dest[2], double* result)
             // put the distance and time in result
             result[0] = dists[0];
             result[1] = times[0];
-            // printf("set values for return\n");
         }
         else
             printf("google_dist: pValue is NULL\n");
@@ -130,8 +129,6 @@ double google_dist(double source[2], double dest[2], double* result)
     {
          PyErr_Print();
     }
-    
-    return dists[0];
 }
 
 

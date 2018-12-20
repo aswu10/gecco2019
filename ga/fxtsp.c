@@ -369,7 +369,7 @@ void end_function()
 void eval_indv(INDIVIDUAL *indv)
    {
    int i, src, dest;
-   double distance, time, segment_d, segment_t, segment;
+   double distance, time;
    FILE *fp;
    
    // static int init = 0;             // flag used to avoid reinitializing the matrix
@@ -404,7 +404,7 @@ void eval_indv(INDIVIDUAL *indv)
           double d[] = {b->lat, b->lon};
           printf("google_count: %d\n", google_count);
           printf("%d -> %d google call: (%f, %f)  (%f, %f)\n", src, dest, a->lat, a->lon, b->lat, b->lon);
-          segment = google_dist(s, d, dist_time);
+          google_dist(s, d, dist_time);
           printf("%d -> %d distance: %f\n", src, dest, dist_time[0]);
           printf("%d -> %d time: %f\n\n", src, dest, dist_time[1]);
           dist_matrix[src][dest] = dist_time[0];
@@ -433,7 +433,7 @@ void eval_indv(INDIVIDUAL *indv)
        double d[] = {b->lat, b->lon};
        printf("google_count: %d\n", google_count);
        printf("origin -> %d google call: (%f, %f)  (%f, %f)\n", dest, a->lat, a->lon, b->lat, b->lon);
-       segment = google_dist(s, d, dist_time);
+       google_dist(s, d, dist_time);
        printf("%d -> %d distance: %f\n", src, dest, dist_time[0]);
        printf("%d -> %d time: %f\n\n", src, dest, dist_time[1]);
        dist_matrix[src][dest] = dist_time[0];
@@ -460,7 +460,7 @@ void eval_indv(INDIVIDUAL *indv)
        double d[] = {b->lat, b->lon};
        printf("google_count: %d\n", google_count);
        printf("%d -> origin google call: (%f, %f)  (%f, %f)\n", src, a->lat, a->lon, b->lat, b->lon);
-       segment = google_dist(s, d, dist_time);
+       google_dist(s, d, dist_time);
        printf("%d -> %d distance: %f\n", src, dest, dist_time[0]);
        printf("%d -> %d time: %f\n\n", src, dest, dist_time[1]);
        dist_matrix[src][dest] = dist_time[0];
