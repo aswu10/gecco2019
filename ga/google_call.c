@@ -23,14 +23,13 @@
 PyObject *pName, *pModule, *pFunc, *pDict, *pValue, *pArgs, *dTuple, *sTuple;
 PyObject *py_dists, *py_times;
 
-
-double google_dist(double source[2], double dest[2])
+double google_dist(double source[2], double dest[2], double* result)
 {        
     // create the Python objects needed for function call and parameters
     // PyObject *pName, *pModule, *pFunc, *pDict, *pValue, *pArgs, *dTuple, *sTuple;
 
     // Because C doesn't provide a function to determine the number of elements
-    // in an array, we use sizeof to dtermine this.
+    // in an array, we use sizeof to determine this.
     // elt_size: number of bytes in a double
     int elt_size = sizeof(double);
 
@@ -117,7 +116,12 @@ double google_dist(double source[2], double dest[2])
             {
                 dists[i] = (double)PyInt_AsLong(PyList_GET_ITEM(py_dists, i));
                 times[i] = (double)PyInt_AsLong(PyList_GET_ITEM(py_times, i));
-            }            
+            }
+            
+            // put the distance and time in result
+            result[0] = dists[0];
+            result[1] = times[0];
+            // printf("set values for return\n");
         }
         else
             printf("google_dist: pValue is NULL\n");

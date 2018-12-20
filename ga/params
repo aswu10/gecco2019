@@ -6,8 +6,10 @@ Output_path		Output
 Pop_size		500
 Init_pop		2
 Loop_until_find_opt	0
-Max_num_gen		50000
+Max_num_gen		10000
 Min_pct_opt		0.5
+# fitness metric: 0 = distance, 1 = time
+Metric          0
 # representation
 Variable_gen_len	0
 Max_gen_len		10
@@ -16,11 +18,11 @@ Hx_window		10
 Parsimony_pressure	0
 #reproduction
 Parent_selection	tournament
-Parent_replacement_on   1
+Parent_replacement_on   0
 Tournament_size		2 
-Uniform_x		0.5
+Uniform_x		0.2
 #mutation
-Gaussian_sd     0.15
+Gaussian_sd     0.25
 # flat fitness
 Flat_fitness		0
 # output to screen

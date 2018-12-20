@@ -138,6 +138,7 @@ int set_param(char *aline)
    else if (!strcmp(name, "Loop_until_find_opt"))
 		sscanf(temp, "%d", &Loop_until_find_opt);
    else if (!strcmp(name, "Min_pct_opt"))  sscanf(temp, "%lf", &Min_pct_opt);
+   else if (!strcmp(name, "Metric")) sscanf(temp, "%d", &Metric);
    else if (!strcmp(name, "Pop_size"))  sscanf(temp, "%d", &Pop_size);
    else if (!strcmp(name, "Variable_gen_len"))
 		sscanf(temp, "%d", &Variable_gen_len);

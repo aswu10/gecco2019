@@ -45,10 +45,12 @@
 #include<Python.h>
 
 /* file scope object */
-static double **dist_matrix;    // matrix of values from previous API calls
-static char *matrix_file;       // file for reading/writing distance matrix information
+static double **dist_matrix;    // matrix of distance values from previous API calls
+static double **time_matrix;    // matrix of time values from previous API calls
+static char *d_matrix_file;     // file for reading/writing distance matrix information
+static char *t_matrix_file;     // file for reading/writing time matrix information
 static int matrix_changed = 0;  // flag checked before writing dist_matrix to file
-
+static double* dist_time;       // array to hold one distance and time from google call
 
 /* internal routine prototypes */
 int allocate_coords_space();
@@ -119,16 +121,20 @@ int make_matrix_filename(char *fxn_file)
 {
     int len = strlen(fxn_file);
     
-    matrix_file = malloc((len - 5) * sizeof(char));
+    d_matrix_file = malloc((len - 5) * sizeof(char));
+    t_matrix_file = malloc((len - 5) * sizeof(char));
     
     int i = 0;
     while(fxn_file[i+3] != '.')
     {
-        matrix_file[i] = fxn_file[i+3];
+        d_matrix_file[i] = fxn_file[i+3];
+        t_matrix_file[i] = fxn_file[i+3];
         i++;
     }
-    matrix_file[i] = '\0';
-    strcat(matrix_file, ".txt");
+    d_matrix_file[i] = '\0';
+    strcat(d_matrix_file, "_d.txt");
+    t_matrix_file[i] = '\0';
+    strcat(t_matrix_file, "_t.txt");
     
 }
 
@@ -136,46 +142,61 @@ int make_matrix_filename(char *fxn_file)
 /********** init_matrix ************/
 /* parameters:
    called by:   init_function(), fxtsp.c
-   actions:     allocate space for and initialize dist_matrix
+   actions:     allocate space for and initialize dist_matrix and time_matrix
 */
 int init_matrix()
 {
-   FILE *fp;
+   FILE *fp_d;
+   FILE *fp_t;
    char *mline;
     
    // allocate space for the matix
    // it is num_cities + 1) x (num_cities + 1) due to inclusion of origin
    dist_matrix = malloc((tsp.num_cities + 1) * sizeof(double*));
+   time_matrix = malloc((tsp.num_cities + 1) * sizeof(double*));
    for(int i = 0; i <= tsp.num_cities; i++)
    {
        dist_matrix[i] = malloc((tsp.num_cities + 1) * sizeof(double));
+       time_matrix[i] = malloc((tsp.num_cities + 1) * sizeof(double));
    }
-   printf("      dist_matrix allocated\n");
+   printf("      dist_matrix and time_matrix allocated\n");
 
    // if the matrix_file exists, read distance data from it
    // if it doesn't exist, initialize the matrix to -1.0
-   fp = fopen(matrix_file, "r");
-   if (fp != NULL)
+   fp_d = fopen(d_matrix_file, "r");
+   fp_t = fopen(t_matrix_file, "r");
+   if (fp_d != NULL)
    {
         mline = malloc(INPUT_LINE_LEN * sizeof(char));
         for(int i = 0; i <= tsp.num_cities; i++)
         {
             for(int j = 0; j <= tsp.num_cities; j++)
             {
-              if (get_next_line(fp, mline) == ENDOFFILE)
+              // process an entry for the distance matrix
+              if (get_next_line(fp_d, mline) == ENDOFFILE)
               {
-                 printf(" Error(read_matrix_file): unexpected end of file\n");
+                 printf(" Error(read_matrix_file): unexpected end of file - distance\n");
                  return ERROR;
               }  /* if */
               
               sscanf(mline, "%lf", &dist_matrix[i][j]);
+
+              // process an entry for the time matrix
+              if (get_next_line(fp_t, mline) == ENDOFFILE)
+              {
+                 printf(" Error(read_matrix_file): unexpected end of file - time\n");
+                 return ERROR;
+              }  /* if */
+              
+              sscanf(mline, "%lf", &time_matrix[i][j]);
+
             }
 
          }  /* for */
         
-        fclose(fp);
+        fclose(fp_d);
         free(mline);
-        printf("      dist_matrix read from file\n");
+        printf("      dist_matrix and time_matrix read from file\n");
    }
    else
    {
@@ -183,9 +204,12 @@ int init_matrix()
        for(int i = 0; i <= tsp.num_cities; i++)
        {
            for(int j = 0; j <= tsp.num_cities; j++)
+           {
                dist_matrix[i][j] = -1.0;
+               time_matrix[i][j] = -1.0;
+           }
        }
-       printf("      dist_matrix initialized to -1.0\n");
+       printf("      dist_matrix and time_matrix initialized to -1.0\n");
    }
 
 //    printf("Distance Matrix:\n");
@@ -213,8 +237,10 @@ int free_matrix()
     for(int i = 0; i < tsp.num_cities; i++)
     {
         free(dist_matrix[i]);
+        free(time_matrix[i]);
     }
     free(dist_matrix);
+    free(time_matrix);
     
     return OK;
 }
@@ -223,29 +249,38 @@ int free_matrix()
 /********** write_matrix ***********/
 /* parameters:
    called by: end_function(), fxtsp.c
-   actions: Write the dist_matrix to a file
+   actions: Write the dist_matrix and time_matrix to files
             for use in later runs
 */
 int write_matrix()
 {
-    FILE * fp;
+    FILE *fp_d;
+    FILE *fp_t;
     
-   fp = fopen(matrix_file, "w");
-   if (fp != NULL)
+   fp_d = fopen(d_matrix_file, "w");
+   fp_t = fopen(t_matrix_file, "w");
+   if(fp_d == NULL)
+   {
+      printf(" Error(write_matrix_file): cannot open file: %s\n", d_matrix_file);
+      return ERROR;              
+   }
+   else if(fp_t == NULL)
+   {
+       printf(" Error(write_matrix_file): cannot open file: %s\n", t_matrix_file);
+      return ERROR;       
+   }
+   else
    {
        for(int i = 0; i <= tsp.num_cities; i++)
        {
            for(int j = 0; j <= tsp.num_cities; j++)
            {
-               fprintf(fp, "%f\n", dist_matrix[i][j]);
+               fprintf(fp_d, "%f\n", dist_matrix[i][j]);
+               fprintf(fp_t, "%f\n", time_matrix[i][j]);
            }
        }
-    fclose(fp);
-   }
-   else
-   {
-      printf(" Error(read_matrix_file): cannot open file: %s\n", matrix_file);
-      return ERROR;       
+   fclose(fp_d);
+   fclose(fp_t);
    }
     
    return OK;
@@ -273,8 +308,11 @@ int init_function(char *fxn_file)
     
     // create and initialize the distance matrix
     init_matrix();
-    printf("   created dist_matrix\n");
+    printf("   created dist_matrix and time_matrix\n");
 
+    // allocate space for dist_time
+    dist_time = malloc(2 * sizeof(double));
+    
 #ifdef DEBUG
    printf(" ---end init_function---\n");
 #endif
@@ -302,16 +340,19 @@ void end_function()
    if(matrix_changed)
    {
        write_matrix();
-       printf("   wrote dist_matrix to file\n");
+       printf("   wrote dist_matrix and time_matrix to file\n");
    }
    else
    {
-       printf("   dist_matrix unchanged\n");
+       printf("   dist_matrix and time_matrix unchanged\n");
    }
     
    // deallocate the dist_matrix
    free_matrix();
-   printf("   deallocated dist_matrix\n\n");
+   printf("   deallocated dist_matrix and time_matrix\n\n");
+    
+   // deallocate dist_time
+   free(dist_time);
     
 #ifdef DEBUG
    printf(" ---end end_function---\n");
@@ -328,7 +369,7 @@ void end_function()
 void eval_indv(INDIVIDUAL *indv)
    {
    int i, src, dest;
-   double distance, segment;
+   double distance, time, segment_d, segment_t, segment;
    FILE *fp;
    
    // static int init = 0;             // flag used to avoid reinitializing the matrix
@@ -341,8 +382,9 @@ void eval_indv(INDIVIDUAL *indv)
       decode(indv);
       }
    
-   /* total distance traveled */
+   /* total distance traveled and time required */
    distance = 0;
+   time = 0;
 
    // calculate distance using Google API
    // the loop calculates distances for lpcations in the genome
@@ -362,18 +404,22 @@ void eval_indv(INDIVIDUAL *indv)
           double d[] = {b->lat, b->lon};
           printf("google_count: %d\n", google_count);
           printf("%d -> %d google call: (%f, %f)  (%f, %f)\n", src, dest, a->lat, a->lon, b->lat, b->lon);
-          segment = google_dist(s, d);
-          printf("%d -> %d distance: %f\n\n", src, dest, segment);
-          dist_matrix[src][dest] = segment;
+          segment = google_dist(s, d, dist_time);
+          printf("%d -> %d distance: %f\n", src, dest, dist_time[0]);
+          printf("%d -> %d time: %f\n\n", src, dest, dist_time[1]);
+          dist_matrix[src][dest] = dist_time[0];
+          time_matrix[src][dest] = dist_time[1];
           google_count++;
           matrix_changed = 1;
       }
-      else
-      {
-           segment = dist_matrix[src][dest];
-      }
+//      else
+//      {
+//           segment_d = dist_matrix[src][dest];
+//           segment_t = time_matrix[src][dest];
+//      }
        
-      distance += segment;
+   distance += dist_matrix[src][dest];
+   time += time_matrix[src][dest];
    }
     
    // Get distance from origin to first location
@@ -387,17 +433,21 @@ void eval_indv(INDIVIDUAL *indv)
        double d[] = {b->lat, b->lon};
        printf("google_count: %d\n", google_count);
        printf("origin -> %d google call: (%f, %f)  (%f, %f)\n", dest, a->lat, a->lon, b->lat, b->lon);
-       segment = google_dist(s, d);
-       printf("origin -> %d distance: %f\n\n", dest, segment);
-       dist_matrix[src][dest] = segment;
+       segment = google_dist(s, d, dist_time);
+       printf("%d -> %d distance: %f\n", src, dest, dist_time[0]);
+       printf("%d -> %d time: %f\n\n", src, dest, dist_time[1]);
+       dist_matrix[src][dest] = dist_time[0];
+       time_matrix[src][dest] = dist_time[1];
        google_count++;
        matrix_changed = 1;
    }
-   else
-   {
-       segment = dist_matrix[src][dest];
-   }
-   distance += segment;
+//   else
+//   {
+//       segment_d = dist_matrix[src][dest];
+//       segment_t = time_matrix[src][dest];
+//   }
+   distance += dist_matrix[src][dest];
+   time += time_matrix[src][dest];
     
    // get distance from last location back to origin
    src = indv->genome[indv->length-1];
@@ -410,20 +460,28 @@ void eval_indv(INDIVIDUAL *indv)
        double d[] = {b->lat, b->lon};
        printf("google_count: %d\n", google_count);
        printf("%d -> origin google call: (%f, %f)  (%f, %f)\n", src, a->lat, a->lon, b->lat, b->lon);
-       segment = google_dist(s, d);
-       printf("%d -> origin distance: %f\n\n", src, segment);
-       dist_matrix[src][dest] = segment;
+       segment = google_dist(s, d, dist_time);
+       printf("%d -> %d distance: %f\n", src, dest, dist_time[0]);
+       printf("%d -> %d time: %f\n\n", src, dest, dist_time[1]);
+       dist_matrix[src][dest] = dist_time[0];
+       time_matrix[src][dest] = dist_time[1];
        google_count++;
        matrix_changed = 1;
    }
-   else
-   {
-       segment = dist_matrix[src][dest];
-   }
-   distance += segment;
+//   else
+//   {
+//       segment_d = dist_matrix[src][dest];
+//       segment_t = time_matrix[src][dest];
+//   }
+   distance += dist_matrix[src][dest];
+   time += time_matrix[src][dest];
 // printf("\n");
-    
-   indv->fitness = distance;
+   
+   // fitness metric: 0 = distance, 1 = time
+   if(Metric == 0)
+       indv->fitness = distance;
+   else
+       indv->fitness = time;
 }  /* eval_indv */
 
 

@@ -16,6 +16,7 @@ int Max_num_gen;
 int Loop_until_find_opt;
 double Min_pct_opt;
 
+int Metric;     /* 0 = distance, 1 = time */
 int Pop_size;
 int Variable_gen_len;		/* 0 = fixed genome length = Max_gen_len */
 				/* 1 = variable, init pop indv sizes random */

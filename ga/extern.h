@@ -12,6 +12,7 @@ extern char *Base;
 extern int Max_num_gen;
 extern int Loop_until_find_opt;
 extern double Min_pct_opt;
+extern int Metric;
 extern int Pop_size;
 extern int Variable_gen_len;
 extern int Hx_window;
