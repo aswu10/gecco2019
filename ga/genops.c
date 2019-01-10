@@ -458,7 +458,7 @@ void uniform_crossover(INDIVIDUAL *parent1, INDIVIDUAL *parent2,
       kid2->parent2_index = -1;
  
       }  /* else don't crossover */
- 
+
 #ifdef DEBUG
    printf(" ---end uniform_crossover()---\n");
 #endif
@@ -1033,7 +1033,7 @@ void gaussian_mutate(INDIVIDUAL *indv)
          } 
       else // random keys
          {
-             // printf("origingal value: %.2lf", indv->floats_genome[random_num]);
+          // printf("origingal value: %.2lf", indv->floats_genome[random_num]);
          double value = gaussian(indv->floats_genome[random_num], Gaussian_sd);
          if (value > 1.0) 
             {

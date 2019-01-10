@@ -170,6 +170,7 @@ int set_param(char *aline)
    else if (!strcmp(name, "Flat_fitness")) sscanf(temp, "%lf", &Flat_fitness);
    else if (!strcmp(name, "Init_pop"))  sscanf(temp, "%d", &Init_pop);
    else if (!strcmp(name, "Init_pop_file"))  sscanf(temp, "%s", Init_pop_file);
+   else if (!strcmp(name, "Elite"))  sscanf(temp, "%d", &Elite);
    else if (!strcmp(name, "Print_params"))  sscanf(temp, "%d", &Print_params);
    else if (!strcmp(name, "Print_function"))  sscanf(temp,"%d",&Print_function);
    else if (!strcmp(name, "Print_pop"))  sscanf(temp, "%d", &Print_pop);

@@ -48,11 +48,13 @@ void copy_indv(INDIVIDUAL *indv1, INDIVIDUAL *indv2)
    indv2->num_kids = indv1->num_kids;
 
    for (i=0; i<indv1->length; i++)
+      {
       indv2->genome[i] = indv1->genome[i];
       if (Init_pop == 2) 
          {
          indv2->floats_genome[i] = indv1->floats_genome[i];
          }
+      }
  
 #ifdef DEBUG
    printf(" ---end copy_indv---\n");

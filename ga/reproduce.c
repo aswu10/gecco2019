@@ -32,6 +32,7 @@
 */
 int reproduce()
    {
+   int i;
 #ifdef DEBUG
    printf(" ---in reproduce()---\n");
 #endif
@@ -41,7 +42,7 @@ int reproduce()
 
 #ifdef SMALLSTEP
    printf(" gen %d, after calculating expected number of offspring\n",
-		Gen.index-1);
+		Gen.index);
    print_population(Pop, 0, Pop_size-1);
    printf(" --- Press any key to continue ---\n");  fgetc(stdin);
 #endif
@@ -51,7 +52,7 @@ int reproduce()
     
 #ifdef SMALLSTEP
    printf(" gen %d, after selecting parents.  Selected parents:\n",
-                Gen.index-1);
+                Gen.index);
    print_population(Parents, 0, Pop_size-1);
    printf(" --- Press any key to continue ---\n");  fgetc(stdin);
 #endif
@@ -60,7 +61,7 @@ int reproduce()
    if (crossover_pop() == ERROR)  return ERROR;
     
 #ifdef SMALLSTEP
-   printf(" gen %d, after crossover.  Offspring:\n", Gen.index-1);
+   printf(" gen %d, after crossover.  Offspring:\n", Gen.index);
    print_population(Kids, 0, Pop_size-1);
    printf(" --- Press any key to continue ---\n");  fgetc(stdin);
 #endif
@@ -70,10 +71,24 @@ int reproduce()
     
 #ifdef SMALLSTEP
    printf(" gen %d, after mutation.  Offspring (gen %d):\n",
-		Gen.index-1, Gen.index);
+		Gen.index, Gen.index+1);
    print_population(Kids, 0, Pop_size-1);
    printf(" --- Press any key to continue ---\n");  fgetc(stdin);
 #endif
+
+  /* if elitism is on, copy the best indv from Pop to the first slot of Kids */
+   if (Elite)
+      {
+      //printf(" Save elite in gen %d\n", Gen.index);
+      copy_indv(Pop[Gen.best_indv_index], Kids[0]);
+
+#ifdef SMALLSTEP
+   printf(" gen %d, after elitism.  Offspring (gen %d):\n",
+		Gen.index, Gen.index+1);
+   print_population(Kids, 0, Pop_size-1);
+   printf(" --- Press any key to continue ---\n");  fgetc(stdin);
+#endif
+      }
 
 #ifdef DEBUG
    printf(" ---end reproduce()---\n");

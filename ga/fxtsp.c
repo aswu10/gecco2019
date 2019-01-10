@@ -507,8 +507,16 @@ int found_solution()
 void fprint_fxn(FILE *fp)
    {
    int i, j, k;
+
+#ifdef DEBUG
+   printf(" ---in fprint_fxn---\n");
+#endif
  
    fprintf(fp, " Function: %s\n", Function_name);
+
+#ifdef DEBUG
+   printf(" ---end fprint_fxn---\n");
+#endif
    }  /* fprint_fxn */
 
 /********** fprint_genes **********/

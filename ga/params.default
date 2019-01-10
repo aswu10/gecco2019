@@ -57,4 +57,6 @@ Print_params		0
 Print_function		0
 Print_pop		0
 Print_best		0
+# 1/8/19 flag for elitism, if 1 save best indv, if 0 no elitism
+Elite			0
 # one last comment

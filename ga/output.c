@@ -68,6 +68,7 @@ void print_params(FILE *fp)
    fprintf(fp, " Flat_fitness = %lf\n", Flat_fitness);
    fprintf(fp, " Init_pop = %d\n", Init_pop);
    fprintf(fp, " Init_pop_file = %s\n", Init_pop_file);
+   fprintf(fp, " Elite = %d\n", Elite);
    fprintf(fp, " Print_params = %d\n", Print_params);
    fprintf(fp, " Print_function = %d\n", Print_function);
    fprintf(fp, " Print_pop = %d\n", Print_pop);
@@ -120,11 +121,19 @@ void print_genome(INDIVIDUAL *indv, int endofline)
    int i;
    // decode(indv);
 
+#ifdef DEBUG
+   printf(" ---in print_genome---\n");
+#endif
+
    for (i=0; i<indv->length; i++)
       {
          printf("%d ",indv->genome[i]);
       }
    if (endofline)  putchar('\n');
+
+#ifdef DEBUG
+   printf(" ---end print_genome---\n");
+#endif
    }  /* print_genome */
 
 /********** fprint_genome **********/
@@ -243,9 +252,16 @@ void fprint_individual(FILE *fp, INDIVIDUAL *indv, int gen)
 */
 void print_gen_best()
    {
+#ifdef DEBUG
+   printf(" ---in print_gen_best---\n");
+#endif
+// 190109AW segmentation fault randomly happens here
    printf(" Gen %3d %8.3lf %8.3lf %8.3lf ", Gen.index, Gen.avg_fitness,
 		Gen.std_dev, Gen.best_fitness);
    print_genome(Pop[Gen.best_indv_index], 1);
+#ifdef DEBUG
+   printf(" ---end print_gen_best---\n");
+#endif
    }  /* print_gen_best */
 
 /********** fprint_gen_best **********/
@@ -256,9 +272,15 @@ void print_gen_best()
 */
 void fprint_gen_best(FILE *fp)
    {
+#ifdef DEBUG
+   printf(" ---in fprint_gen_best---\n");
+#endif
    fprintf(fp, " Gen %3d %8.3lf %8.3lf %8.3lf ", Gen.index, Gen.avg_fitness,
                 Gen.std_dev, Gen.best_fitness);
    fprint_genome(fp, Pop[Gen.best_indv_index], 1);
+#ifdef DEBUG
+   printf(" ---end fprint_gen_best---\n");
+#endif
    }  /* fprint_gen_best */
 
 /********** gen_output **********/
@@ -278,25 +300,28 @@ void gen_output()
   /* output to screen */
    if (Print_stats)
       {
-	  if (Scientific_notation)
-	     {
-		 printf(" Gen %3d avg %.4e stdev %.4e best %.4e (%d) worst %.4e (%d)\n",
-		   Gen.index, Gen.avg_fitness, Gen.std_dev, Gen.best_fitness,
-        	  Gen.best_indv_index, Gen.worst_fitness, Gen.worst_indv_index);	 
-		 }
+      if (Scientific_notation)
+         {
+         printf(" Gen %3d avg %.4e stdev %.4e best %.4e (%d) worst %.4e (%d)\n",
+                Gen.index, Gen.avg_fitness, Gen.std_dev, Gen.best_fitness,
+                Gen.best_indv_index, Gen.worst_fitness, Gen.worst_indv_index);
+         }
       else 
-	     {
-	     printf(" Gen %3d avg %.3lf stdev %.3lf best %.3lf (%d) worst %.3lf (%d)\n",
-		   Gen.index, Gen.avg_fitness, Gen.std_dev, Gen.best_fitness,
-        	  Gen.best_indv_index, Gen.worst_fitness, Gen.worst_indv_index);
-		 }
-	  }
+         {
+         printf(" Gen %3d avg %.3lf stdev %.3lf best %.3lf (%d) worst %.3lf (%d)\n",
+                Gen.index, Gen.avg_fitness, Gen.std_dev, Gen.best_fitness,
+                Gen.best_indv_index, Gen.worst_fitness, Gen.worst_indv_index);
+         }
+      }
 	  
+//printf("**1\n");
 
    if (Print_fxn_best)
       fxn_fprint_gen_indv(stdout, Gen.best_indv_index);
    else if (Print_best)
       print_gen_best();
+
+//printf("**2\n");
 
   /* output to files */
    if (file_on("genbest"))

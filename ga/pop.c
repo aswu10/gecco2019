@@ -148,7 +148,7 @@ int pop_allocate()
       if (Init_pop == 2)  
          {
          Pop[i]->floats_genome = (double *)malloc(Max_gen_len * sizeof(double));
-         Kids[i]->floats_genome = (double *)malloc(Max_gen_len * sizeof(double));
+        Kids[i]->floats_genome = (double *)malloc(Max_gen_len * sizeof(double));
          }
       }  /* for i */
 
