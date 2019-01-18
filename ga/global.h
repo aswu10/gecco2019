@@ -54,6 +54,7 @@ int Init_pop;			/* what is initial pop?  0 = all 0's, */
 				/* 1 = all 1's, 2 = random, 3 = from file */
 char *Init_pop_file;		/* if Init_pop=3, read from here */
 int Elite;			/* 1=elitism on: save best indv, 0=off */
+int Random_immigrants;		/* indicate # random immigrants each gen */
 
 				/* about printing to screen during run */
 int Print_params;		/* if 1, print params at start of run */

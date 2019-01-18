@@ -69,6 +69,7 @@ void print_params(FILE *fp)
    fprintf(fp, " Init_pop = %d\n", Init_pop);
    fprintf(fp, " Init_pop_file = %s\n", Init_pop_file);
    fprintf(fp, " Elite = %d\n", Elite);
+   fprintf(fp, " Random_immigrants = %d\n", Random_immigrants);
    fprintf(fp, " Print_params = %d\n", Print_params);
    fprintf(fp, " Print_function = %d\n", Print_function);
    fprintf(fp, " Print_pop = %d\n", Print_pop);

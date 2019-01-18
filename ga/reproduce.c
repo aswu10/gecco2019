@@ -33,6 +33,7 @@
 int reproduce()
    {
    int i;
+   int g;
 #ifdef DEBUG
    printf(" ---in reproduce()---\n");
 #endif
@@ -81,14 +82,30 @@ int reproduce()
       {
       //printf(" Save elite in gen %d\n", Gen.index);
       copy_indv(Pop[Gen.best_indv_index], Kids[0]);
+      }
+
+  /* if Random_immigrants > 0, generate random immigrants starting at the
+     bottom of the population, e.g. starting at slot Pop_size -1 */
+   if (Random_immigrants > 0)
+      {
+   //   printf(" *** *** Generate random immigrants in Kids slots: \n");
+      for (i=Pop_size-1; i>=Pop_size-Random_immigrants; i--)
+         {
+    //     printf(" %d\n", i);
+         for (g=Pop[i]->length-1; g>=0; g--)
+            {
+            Pop[i]->floats_genome[g] = funiform(1);
+            }
+         decode(Pop[i]);
+         }
+      }
 
 #ifdef SMALLSTEP
-   printf(" gen %d, after elitism.  Offspring (gen %d):\n",
+   printf(" gen %d, after elitism and random immmigrants.  Offspring (gen %d):\n",
 		Gen.index, Gen.index+1);
    print_population(Kids, 0, Pop_size-1);
    printf(" --- Press any key to continue ---\n");  fgetc(stdin);
 #endif
-      }
 
 #ifdef DEBUG
    printf(" ---end reproduce()---\n");

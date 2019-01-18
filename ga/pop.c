@@ -247,8 +247,8 @@ void pop_individuals_rkeys()
       for (j=Pop[i]->length-1; j>=0; j--)
          {
          Pop[i]->floats_genome[j] = funiform(1);
-		 decode(Pop[i]);
          }  /* for j */
+      decode(Pop[i]);
       }  /* for i */
 
 #ifdef DEBUG

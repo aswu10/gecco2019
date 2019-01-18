@@ -121,7 +121,7 @@ int ga_init(char *params_file, char *opfiles_file, char *fxn_file, double xover_
 
    if (Print_params)
       {
-      // print_params(stdout);
+      print_params(stdout);
       printf("\n");
       print_opfiles(stdout);
       printf("\n");
