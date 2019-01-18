@@ -165,9 +165,10 @@ int init_matrix()
    // if it doesn't exist, initialize the matrix to -1.0
    fp_d = fopen(d_matrix_file, "r");
    fp_t = fopen(t_matrix_file, "r");
+   mline = malloc(INPUT_LINE_LEN * sizeof(char));
+    
    if (fp_d != NULL)
    {
-        mline = malloc(INPUT_LINE_LEN * sizeof(char));
         for(int i = 0; i <= tsp.num_cities; i++)
         {
             for(int j = 0; j <= tsp.num_cities; j++)
@@ -181,22 +182,12 @@ int init_matrix()
               
               sscanf(mline, "%lf", &dist_matrix[i][j]);
 
-              // process an entry for the time matrix
-              if (get_next_line(fp_t, mline) == ENDOFFILE)
-              {
-                 printf(" Error(read_matrix_file): unexpected end of file - time\n");
-                 return ERROR;
-              }  /* if */
-              
-              sscanf(mline, "%lf", &time_matrix[i][j]);
-
             }
 
          }  /* for */
         
         fclose(fp_d);
-        free(mline);
-        printf("      dist_matrix and time_matrix read from file\n");
+        printf("      dist_matrix read from file\n");
    }
    else
    {
@@ -209,20 +200,45 @@ int init_matrix()
                time_matrix[i][j] = -1.0;
            }
        }
-       printf("      dist_matrix and time_matrix initialized to -1.0\n");
+       printf("      dist_matrix initialized to -1.0\n");
    }
 
-//    printf("Distance Matrix:\n");
-//    for(int i = 0; i <= tsp.num_cities; i++)
-//    {
-//        for(int j = 0; j <= tsp.num_cities; j++)
-//        {
-//            printf("%.1f ", dist_matrix[i][j]);
-//        }
-//        printf("\n");
-//    }
-//    printf("\n");
+   if (fp_t != NULL)
+   {
+        for(int i = 0; i <= tsp.num_cities; i++)
+        {
+            for(int j = 0; j <= tsp.num_cities; j++)
+            {
+              // process an entry for the distance matrix
+              if (get_next_line(fp_t, mline) == ENDOFFILE)
+              {
+                 printf(" Error(read_matrix_file): unexpected end of file - time\n");
+                 return ERROR;
+              }  /* if */
+              
+              sscanf(mline, "%lf", &time_matrix[i][j]);
 
+            }
+
+         }  /* for */
+        
+        fclose(fp_t);
+        printf("      time_matrix read from file\n");
+   }
+   else
+   {
+       // initialize all elements to -1.0
+       for(int i = 0; i <= tsp.num_cities; i++)
+       {
+           for(int j = 0; j <= tsp.num_cities; j++)
+           {
+               time_matrix[i][j] = -1.0;
+           }
+       }
+       printf("      time_matrix initialized to -1.0\n");
+   }
+                
+   free(mline);
    return OK;
 }
 
@@ -301,7 +317,7 @@ int init_function(char *fxn_file)
 
     // required by the C Python library
     Py_Initialize();
-    printf("   completed Py_Initialize\n");
+    printf("   completed Py_Initialize\n\n");
     
     // make matrix filename from fxn_file
     make_matrix_filename(fxn_file);
@@ -312,6 +328,8 @@ int init_function(char *fxn_file)
 
     // allocate space for dist_time
     dist_time = malloc(2 * sizeof(double));
+    
+    printf("\n");
     
 #ifdef DEBUG
    printf(" ---end init_function---\n");
