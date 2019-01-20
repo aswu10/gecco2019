@@ -3,10 +3,10 @@
 Rerun			-1
 Output_path		Output
 # starting and stopping
-Pop_size		500
+Pop_size		400
 Init_pop		2
 Loop_until_find_opt	0
-Max_num_gen		10000
+Max_num_gen		5000
 Min_pct_opt		0.5
 # fitness metric: 0 = distance, 1 = time
 Metric          0
@@ -18,7 +18,7 @@ Hx_window		10
 Parsimony_pressure	0
 #reproduction
 Parent_selection	tournament
-Parent_replacement_on   0
+Parent_replacement_on   1
 Tournament_size		4 
 Uniform_x		0.2
 #mutation
@@ -33,5 +33,6 @@ Print_stats		    0
 Print_best		    1
 Print_fxn_best		0
 Scientific_notation 	0
-Elite			1
+Elite			0
 Random_immigrants	200
+RI_interval		6

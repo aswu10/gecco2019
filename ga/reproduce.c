@@ -86,17 +86,18 @@ int reproduce()
 
   /* if Random_immigrants > 0, generate random immigrants starting at the
      bottom of the population, e.g. starting at slot Pop_size -1 */
-   if (Random_immigrants > 0)
+   if (Gen.index % RI_interval == 0)
       {
-   //   printf(" *** *** Generate random immigrants in Kids slots: \n");
-      for (i=Pop_size-1; i>=Pop_size-Random_immigrants; i--)
+      if (Random_immigrants > 0)
          {
-    //     printf(" %d\n", i);
-         for (g=Pop[i]->length-1; g>=0; g--)
+         for (i=Pop_size-1; i>=Pop_size-Random_immigrants; i--)
             {
-            Pop[i]->floats_genome[g] = funiform(1);
+            for (g=Pop[i]->length-1; g>=0; g--)
+               {
+               Pop[i]->floats_genome[g] = funiform(1);
+               }
+            decode(Pop[i]);
             }
-         decode(Pop[i]);
          }
       }
 

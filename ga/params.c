@@ -173,6 +173,7 @@ int set_param(char *aline)
    else if (!strcmp(name, "Elite"))  sscanf(temp, "%d", &Elite);
    else if (!strcmp(name, "Random_immigrants"))
                 sscanf(temp, "%d", &Random_immigrants);
+   else if (!strcmp(name, "RI_interval"))  sscanf(temp, "%d", &RI_interval);
    else if (!strcmp(name, "Print_params"))  sscanf(temp, "%d", &Print_params);
    else if (!strcmp(name, "Print_function"))  sscanf(temp,"%d",&Print_function);
    else if (!strcmp(name, "Print_pop"))  sscanf(temp, "%d", &Print_pop);
@@ -186,8 +187,11 @@ int set_param(char *aline)
       return ERROR;
       }  /* else bad parameter name */
 
-   if (Random_immigrants > Pop_size - Elite) 
-      Random_immigrants = Pop_size - Elite;
+   // make sure random immigrant size is valid
+   if (Random_immigrants > Pop_size-Elite)  Random_immigrants = Pop_size-Elite;
+
+   // make sure RI interval is greater than or equal to 1.  Defaults to 1.
+   if (RI_interval <= 0)  RI_interval = 1;
 
 #ifdef DEBUG
    printf(" ---end set_param()---\n");

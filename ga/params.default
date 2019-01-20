@@ -61,5 +61,8 @@ Print_best		0
 Elite			0
 # 1/18/19 indicates the number of random immigrants to include in population
 # in each generation.  User must ensure that it is not set higher than pop size.
+# RI_interval indicates the interval at which random immigrants occur.
+# Defaults to 1 (every generation) if an invalid number is specified.
 Random_immigrants	0
+RI_interval		1
 # one last comment
