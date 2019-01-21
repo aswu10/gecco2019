@@ -143,7 +143,7 @@ int ga_init(char *params_file, char *opfiles_file, char *fxn_file, double xover_
    if (gen_stats() == ERROR)  return ERROR;
 
 #ifdef STEP
-      printf(" Generation %d %d\n", Gen.index);
+      printf(" Generation %d\n", Gen.index);
       print_population(Pop, 0, Pop_size-1);
       printf(" --- Press any key to continue ---\n");  fgetc(stdin);
 #endif
@@ -176,9 +176,21 @@ int ga_loop()
    while (ga_continue())
       {
      /* first thing to do is to make the offspring the current generation */
+/*
+printf("BEFORE Pop:\n");
+print_population(Pop, 0, Pop_size-1);
+printf("BEFORE Kids:\n");
+print_population(Kids, 0, Pop_size-1);
+*/
       temp = Pop;
       Pop = Kids;
       Kids = temp;
+/*
+printf("AFTER Pop:\n");
+print_population(Pop, 0, Pop_size-1);
+printf("AFTER Kids:\n");
+print_population(Kids, 0, Pop_size-1);
+*/
 
      /* start of gen stats and calculations & increment generation counter */
       if (gen_start() == ERROR)  return ERROR;
@@ -187,23 +199,6 @@ int ga_loop()
 
      /* calculate gen stats relating to fitness values */
       if (gen_stats() == ERROR)  return ERROR;
-
-     /* FXN_SPECIFIC_CALL */
-     /* if we are tracing the construction and disruption of
-        building blocks, this is where to do it */
-     /* at this point, Pop contains the current evaluated generation
-        and Kids actually contains the evaluated parent generation */
-     /* 12.30.98.AW check call to trace_bb_data()  This will only
-        compile if all functions have this file.  Put a dummy function
-        into fxn.c (onemax problem) for now. */
-      if (!strcmp(Function_name, "FRR"))
-         {
-         if (rr.trace_bb_data == 1)  trace_bb_data();
-         }
-      else if (!strcmp(Function_name, "RR"))
-         {
-         if (rr.trace_bb_data == 1)  trace_bb_data();
-         }
 
       if (Print_pop)
          {

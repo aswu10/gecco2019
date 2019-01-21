@@ -22,6 +22,8 @@
 #include "extern.h"
 #include "output.h"
 
+//#define DEBUG 1
+
 /********** print_params **********/
 /* parameters:	fp	where to print, includes stdout (screen)
 			Assume that fp has already been fopened.
@@ -174,12 +176,20 @@ void print_population(POPULATION pop, int first, int last)
    {
    int i;
 
+#ifdef DEBUG
+   printf(" ---in print_population---\n");
+#endif
+
    for (i=first; i<=last; i++)
       {   
       printf(" %3d %3d %6.2lf ", pop[i]->index,pop[i]->length,pop[i]->fitness);
       printf("%6.2lf   ", pop[i]->calc_num_offspring);
       print_genome(pop[i], 1);
       }  /* for i */
+
+#ifdef DEBUG
+   printf(" ---end print_population---\n");
+#endif
    }  /* print_population */
 
 void print_pop(POPULATION pop, int first, int last)

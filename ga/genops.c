@@ -180,11 +180,15 @@ void onept_crossover(INDIVIDUAL *parent1, INDIVIDUAL *parent2,
          {
          kid1->floats_genome[i] = parent1->floats_genome[i];
          kid2->floats_genome[i] = parent2->floats_genome[i];
+         kid1->genome[i] = parent1->genome[i];
+         kid2->genome[i] = parent2->genome[i];
          }  /* for i */
       for (i=cross_point; i<parent1->length; i++)
          {
          kid1->floats_genome[i] = parent2->floats_genome[i];
          kid2->floats_genome[i] = parent1->floats_genome[i];
+         kid1->genome[i] = parent2->genome[i];
+         kid2->genome[i] = parent1->genome[i];
          }  /* for i */
      /* set parent info, parent 1 contributes first portion */
       kid1->parent1_index = parent1->index;
@@ -293,16 +297,22 @@ void twopt_crossover(INDIVIDUAL *parent1, INDIVIDUAL *parent2,
          {
          kid1->floats_genome[i] = parent1->floats_genome[i];
          kid2->floats_genome[i] = parent2->floats_genome[i];
+         kid1->genome[i] = parent1->genome[i];
+         kid2->genome[i] = parent2->genome[i];
          }  /* for i */
       for (i=cross_point; i<cross_point2; i++)
          {
          kid1->floats_genome[i] = parent2->floats_genome[i];
          kid2->floats_genome[i] = parent1->floats_genome[i];
+         kid1->genome[i] = parent2->genome[i];
+         kid2->genome[i] = parent1->genome[i];
          }  /* for i */
       for (i=cross_point2; i<parent1->length; i++)
          {
          kid1->floats_genome[i] = parent1->floats_genome[i];
          kid2->floats_genome[i] = parent2->floats_genome[i];
+         kid1->genome[i] = parent1->genome[i];
+         kid2->genome[i] = parent2->genome[i];
          }  /* for i */
      /* set parent info, parent 1 contributes first portion */
       kid1->parent1_index = parent1->index;
@@ -420,6 +430,8 @@ void uniform_crossover(INDIVIDUAL *parent1, INDIVIDUAL *parent2,
             kid1->floats_genome[i] = parent1->floats_genome[i];
             kid2->floats_genome[i] = parent2->floats_genome[i];
  
+            kid1->genome[i] = parent1->genome[i];
+            kid2->genome[i] = parent2->genome[i];
             }  /* if */
          else
             {
@@ -427,6 +439,8 @@ void uniform_crossover(INDIVIDUAL *parent1, INDIVIDUAL *parent2,
             kid1->floats_genome[i] = parent2->floats_genome[i];
             kid2->floats_genome[i] = parent1->floats_genome[i];
  
+            kid1->genome[i] = parent2->genome[i];
+            kid2->genome[i] = parent1->genome[i];
             }  /* else */
          }  /* for i */
  
@@ -1047,6 +1061,8 @@ void gaussian_mutate(INDIVIDUAL *indv)
          indv->floats_genome[random_num] = value; 
          }
       }  /* for i */
+
+   if (Init_pop != 2) decode(indv);
 
 #ifdef DEBUG
    printf(" ---end gaussian_mutate()---\n");

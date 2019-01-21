@@ -14,11 +14,6 @@
                 fprint_genes()          09.23.98.AW
 		fxn_fprint_gen_indv()	10.07.98.AW
 
-   Routines:	(dummy added because RR functions have a call and the
-		GA needs to be able to compile a call to this function
-		line 164 in ga.c)
-		trace_bb_data()		12.30.98.AW
-
    Each new function is expected to provide it's own set of routines.
    Need to provide one of the following:
 		- routine for reading in the function file
@@ -584,21 +579,6 @@ void fxn_fprint_gen_indv(FILE *fp, int indv)
    }  /* fxn_fprint_gen_indv */
 
 /********** function specific rqrd functions -- will be called by GA *********/
- 
-/********** trace_bb_data **********/
-/* parameters:
-   called by:   ga_loop(), ga.c
-   actions:     traces construction and disruption of bb
-   note:        expect Pop to contain the evaluated population (Gen.index)
-                and Kids to contain the evaluated parents (Gen.index-1).
-
-   12.30.98.AW	added because the GA would not compile fxn.c without
-		this function call.  Calls it in ga.c ~ line 164.
-		Was supposed to only be needed by RR functions.
-*/
-void trace_bb_data()
-   {
-   }  /* trace_bb_data */
 
 void decode(INDIVIDUAL *indv) {
 #ifdef DEBUG
