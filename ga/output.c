@@ -133,6 +133,16 @@ void print_genome(INDIVIDUAL *indv, int endofline)
       {
          printf("%d ",indv->genome[i]);
       }
+
+   if (Init_pop == 2)
+      {
+      printf(" | ");
+      for (i=0; i<indv->length; i++)
+         {
+         printf("%5.3lf ",indv->floats_genome[i]);
+         }
+      }
+
    if (endofline)  putchar('\n');
 
 #ifdef DEBUG

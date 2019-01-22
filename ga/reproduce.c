@@ -92,11 +92,11 @@ int reproduce()
          {
          for (i=Pop_size-1; i>=Pop_size-Random_immigrants; i--)
             {
-            for (g=Pop[i]->length-1; g>=0; g--)
+            for (g=Kids[i]->length-1; g>=0; g--)
                {
-               Pop[i]->floats_genome[g] = funiform(1);
+               Kids[i]->floats_genome[g] = funiform(1);
                }
-            decode(Pop[i]);
+            decode(Kids[i]);
             }
          }
       }

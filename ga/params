@@ -3,7 +3,7 @@
 Rerun			-1
 Output_path		Output
 # starting and stopping
-Pop_size		400
+Pop_size		500
 Init_pop		2
 Loop_until_find_opt	0
 Max_num_gen		5000
@@ -33,6 +33,6 @@ Print_stats		    0
 Print_best		    1
 Print_fxn_best		0
 Scientific_notation 	0
-Elite			0
-Random_immigrants	200
-RI_interval		6
+Elite			1
+Random_immigrants	75
+RI_interval		1

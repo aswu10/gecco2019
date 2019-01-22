@@ -196,8 +196,8 @@ void onept_crossover(INDIVIDUAL *parent1, INDIVIDUAL *parent2,
       kid2->parent1_index = parent2->index;
       kid2->parent2_index = parent1->index;
 
-      // decode(kid1);
-      // decode(kid2);
+      decode(kid1);
+      decode(kid2);
       
       }  /* if */
    else
@@ -320,8 +320,8 @@ void twopt_crossover(INDIVIDUAL *parent1, INDIVIDUAL *parent2,
       kid2->parent1_index = parent2->index;
       kid2->parent2_index = parent1->index;
 
-	  // decode(kid1);
-      // decode(kid2);
+      decode(kid1);
+      decode(kid2);
 	  
       }  /* if */
    else
@@ -450,8 +450,8 @@ void uniform_crossover(INDIVIDUAL *parent1, INDIVIDUAL *parent2,
       kid2->parent1_index = parent2->index;
       kid2->parent2_index = parent1->index;
  
-	  // decode(kid1);
-      // decode(kid2);
+      decode(kid1);
+      decode(kid2);
  
       }  /* if yes crossover */
    else
@@ -1037,6 +1037,11 @@ void gaussian_mutate(INDIVIDUAL *indv)
 #endif
 
    num_mutations = poisson(((double)Mut_rate * (double)indv->length));
+#ifdef SMALLERSTEP
+   printf(" Indv %d before ", indv->index);
+   print_genome(indv, 1);
+   printf(" Individual %d gets %d mutations at: ", indv->index, num_mutations);
+#endif
 
    for (i=num_mutations-1; i>=0; i--)
       {
@@ -1060,9 +1065,21 @@ void gaussian_mutate(INDIVIDUAL *indv)
          
          indv->floats_genome[random_num] = value; 
          }
+
+#ifdef SMALLERSTEP
+   printf(" %d ", random_num);
+#endif
       }  /* for i */
 
-   if (Init_pop != 2) decode(indv);
+   if (Init_pop == 2) decode(indv);
+
+#ifdef SMALLERSTEP
+   printf("\n");
+   printf(" Indv %d after  ", indv->index);
+   print_genome(indv, 1);
+   printf("\n");
+   printf(" --- Press any key to continue ---\n");  fgetc(stdin);
+#endif
 
 #ifdef DEBUG
    printf(" ---end gaussian_mutate()---\n");
