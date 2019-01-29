@@ -101,6 +101,24 @@ int reproduce()
          }
       }
 
+  /* if Mass_extinction > 0, implement mass extinction starting at the
+     bottom of the population, e.g. starting at slot Pop_size -1 */
+  /* ME overwrites the RI individuals */
+   if (Gen.index % ME_interval == 0)
+      {
+      if (Mass_extinction > 0)
+         {
+         for (i=Pop_size-1; i>=Pop_size-Mass_extinction; i--)
+            {
+            for (g=Kids[i]->length-1; g>=0; g--)
+               {
+               Kids[i]->floats_genome[g] = funiform(1);
+               }
+            decode(Kids[i]);
+            }
+         }
+      }
+
 #ifdef SMALLSTEP
    printf(" gen %d, after elitism and random immmigrants.  Offspring (gen %d):\n",
 		Gen.index, Gen.index+1);

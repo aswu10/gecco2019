@@ -73,6 +73,8 @@ void print_params(FILE *fp)
    fprintf(fp, " Elite = %d\n", Elite);
    fprintf(fp, " Random_immigrants = %d\n", Random_immigrants);
    fprintf(fp, " RI_interval = %d\n", RI_interval);
+   fprintf(fp, " Mass_extinction = %d\n", Mass_extinction);
+   fprintf(fp, " ME_interval = %d\n", ME_interval);
    fprintf(fp, " Print_params = %d\n", Print_params);
    fprintf(fp, " Print_function = %d\n", Print_function);
    fprintf(fp, " Print_pop = %d\n", Print_pop);

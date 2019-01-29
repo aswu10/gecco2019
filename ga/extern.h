@@ -39,6 +39,8 @@ extern char *Init_pop_file;
 extern int Elite;
 extern int Random_immigrants;
 extern int RI_interval;
+extern int Mass_extinction;
+extern int ME_interval;
 extern int Print_params;
 extern int Print_function;
 extern int Print_pop;

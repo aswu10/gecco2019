@@ -56,6 +56,8 @@ char *Init_pop_file;		/* if Init_pop=3, read from here */
 int Elite;			/* 1=elitism on: save best indv, 0=off */
 int Random_immigrants;		/* indicate # random immigrants each gen */
 int RI_interval;		/* interval at which random immigrants occur */
+int Mass_extinction;            /* # indvs to kill in mass extinction */
+int ME_interval;                /* interval at which mass extinction occurs */
 
 				/* about printing to screen during run */
 int Print_params;		/* if 1, print params at start of run */
