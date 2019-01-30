@@ -78,7 +78,7 @@ int ga_start(char *params_file, char *opfiles_file, char *fxn_file, double xover
       Output_file[get_file_pointer("time")].fp = fopen(
                 Output_file[get_file_pointer("time")].filename, "a");
       fprintf(Output_file[get_file_pointer("time")].fp, 
-             "run %3d runtime %lf start %s end %s\n",
+             "run %3d runtime(sec) %lf start %s end %s\n",
              Run_num, difftime(tend, tstart), start_time_string, end_time_string);
       fclose(Output_file[get_file_pointer("time")].fp);
       }
