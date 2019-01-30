@@ -11,10 +11,13 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "types.h"
 #include "extern.h"
 #include "init.h"
 #include "random.h"
+#include "params.h"
 
 /********** init_run **********/
 /* parameters:

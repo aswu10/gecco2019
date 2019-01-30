@@ -21,6 +21,8 @@
 #include "types.h"
 #include "extern.h"
 #include "output.h"
+#include "params.h"
+#include "fxtsp.h"
 
 //#define DEBUG 1
 

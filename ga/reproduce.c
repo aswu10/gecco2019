@@ -12,13 +12,16 @@
 */
 
 #include <stdio.h>
+#include <string.h>
+#include <float.h>
 #include "types.h"
 #include "extern.h"
 #include "reproduce.h"
 #include "util.h"
 #include "random.h"
 #include "genops.h"
-#include <float.h>
+#include "indv.h"
+#include "fxtsp.h"
 
 /********** reproduce **********/
 /* parameters:

@@ -9,3 +9,4 @@ int ga_start(char *params_file, char *opfiles_file, char *fxn_file, double xover
 int ga_init();
 int ga_loop();
 int ga_continue();
+int ga_end();

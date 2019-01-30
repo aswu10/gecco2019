@@ -21,6 +21,7 @@
 #include "extern.h"
 #include "stats.h"
 #include "indv.h"
+#include "params.h"
 #include "output.h"
 
 /********** run_start **********/

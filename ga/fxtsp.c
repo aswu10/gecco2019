@@ -34,6 +34,8 @@
 #include <unistd.h>
 #include "types.h"
 #include "extern.h"
+#include "params.h"
+#include "output.h"
 #include "google_call.h"
 #include "fxtsp.h"
 

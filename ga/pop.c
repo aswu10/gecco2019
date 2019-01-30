@@ -22,6 +22,9 @@
 #include "pop.h"
 #include "params.h"
 #include "random.h"
+#include "indv.h"
+#include "util.h"
+#include "fxtsp.h"
 
 
 

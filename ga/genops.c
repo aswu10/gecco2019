@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 #include "types.h"
 #include "extern.h"
@@ -22,6 +23,7 @@
 #include "random.h"
 #include "params.h"
 #include "util.h"
+#include "fxtsp.h"
 
 #define DEBUG_MUT	/* debug mutation */
 #define HX		/* debug homologous crossover */

@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "types.h"
 #include "global.h"
 #include "ga.h"
@@ -20,6 +21,9 @@
 #include "pop.h"
 #include "stats.h"
 #include "reproduce.h"
+#include "params.h"
+#include "output.h"
+#include "fxtsp.h"
 
 /********** ga_start **********/
 /* parameters:  params_file     list of run parameters
@@ -31,12 +35,21 @@
 int ga_start(char *params_file, char *opfiles_file, char *fxn_file, double xover_rate, double mut_rate, double uniform_xover_rate, char *xover_op, char *mut_op)
    {
    int error;
+   char start_time_string[100];
+   char end_time_string[100];
+   time_t tstart, tend;
 
 #ifdef DEBUG
    printf(" ---in ga_start()---\n");
 #endif
 
-   error = ga_init(params_file, opfiles_file, fxn_file, xover_rate, mut_rate, uniform_xover_rate, xover_op, mut_op);
+  /* get start time */
+   time(&tstart);
+   strftime(start_time_string, 99, " %m/%d/%y  %H:%M:%S ", localtime(&tstart));
+   printf(" Start time: %s\n", start_time_string);
+
+   error = ga_init(params_file, opfiles_file, fxn_file, xover_rate, 
+                   mut_rate, uniform_xover_rate, xover_op, mut_op);
    if (error == ERROR)
       {
       printf(" Error(ga): ga_init ends on error.\n");
@@ -48,6 +61,26 @@ int ga_start(char *params_file, char *opfiles_file, char *fxn_file, double xover
       {
       printf(" Error(ga): ga_loop ends on error.\n");
       return ERROR;
+      }
+
+  /* get end time */
+   time(&tend);
+   strftime(end_time_string, 99, " %m/%d/%y  %H:%M:%S ", localtime(&tend));
+   printf(" End time: %s\n", end_time_string);
+
+  /* print time data to file if *.time file is turned on */
+  /* 19.01.30.AW  This was moved from main.c to here so that the time data */
+  /* could be recorded for each run as an output file.  This needs to be   */
+  /* done before the call to ga_end() because ga_end() frees up the space  */
+  /* allocated to the output file array.                                   */
+   if (file_on("time"))
+      {
+      Output_file[get_file_pointer("time")].fp = fopen(
+                Output_file[get_file_pointer("time")].filename, "a");
+      fprintf(Output_file[get_file_pointer("time")].fp, 
+             "run %3d runtime %lf start %s end %s\n",
+             Run_num, difftime(tend, tstart), start_time_string, end_time_string);
+      fclose(Output_file[get_file_pointer("time")].fp);
       }
 
    error = ga_end();

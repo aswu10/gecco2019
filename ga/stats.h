@@ -10,3 +10,4 @@ int run_start();
 int run_end();
 int gen_start();
 int gen_end();
+int gen_stats();

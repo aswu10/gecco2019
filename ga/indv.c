@@ -18,6 +18,7 @@
 #include "extern.h"
 #include "indv.h"
 #include "output.h"
+#include "random.h"
 
 /********** copy_indv **********/
 /* parameters:  indv1
