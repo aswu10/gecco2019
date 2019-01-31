@@ -91,6 +91,8 @@
 #include <sys/time.h>
 #endif
 
+#include <fcntl.h>
+#include <unistd.h>
 #include <math.h>
 #include "types.h"
 #include "random.h"
@@ -126,6 +128,68 @@ double knuth_random()
 }
 
 
+long seed_random(seed)
+long seed;
+{
+    long mj;
+    long mk;
+    register int i;
+    register int k;
+
+    // printf("seed at start: %ld\n", seed);
+    if (seed < 0)
+    {
+        int intseed;
+        int rFile = open("/dev/urandom", O_RDONLY);
+        // printf("rFile: %d\n", rFile);
+        int ret = read(rFile, &intseed, sizeof(intseed));
+        while (intseed <= 0)
+        {
+            ret = read(rFile, &intseed, sizeof(intseed));
+            // printf("ret: %d   intseed: %d\n", ret, intseed);
+        }
+        close(rFile);
+        
+        seed = intseed;
+        
+        if (seed >= MBIG)
+        {
+            printf(" Seed value (%ld) too big (> %d) in seed_random().\n", seed, MBIG);
+            seed = seed % MBIG;
+            printf(" New seed value: %ld\n", seed);
+        }
+    }
+    
+    ma[55] = mj = seed;
+    mk = 1;
+    
+    for (i = 1; i <= 54; i++){
+	register int ii = (21 * i) % 55;
+	ma[ii] = mk;
+	mk = mj - mk;
+	if (mk < 0){
+	    mk += MBIG;
+	}
+	mj = ma[ii];
+    }
+    
+    for (k = 0; k < 4; k++){
+	for (i = 1; i <= 55; i++){
+	    ma[i] -= ma[1 + (i + 30) % 55];
+	    if (ma[i] < 0){
+		ma[i] += MBIG;
+	    }
+	}
+    }
+    
+    inext = 0;
+    inextp = 31;
+
+    // printf("seed at end: %ld\n", seed);
+    return seed;
+}
+
+/*
 long seed_random(seed)
 long seed;
 {
@@ -177,6 +241,7 @@ long seed;
     
     return seed;
 }
+*/
 
 /* uniform(n) returns a random integer value in the
    range of 0, ..., n-1 */
