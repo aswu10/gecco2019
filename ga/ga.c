@@ -328,11 +328,23 @@ int ga_end()
    close_pop();
 
   /* from read_default_opfiles(), params.c */
-   for (i=Max_num_output_files-1; i>=0; i--)
-      {
-      free(Output_file[i].extension);
-      if (Output_file[i].on)  free(Output_file[i].filename);
-      }  /* for i */
+   for (i=Max_num_output_files-1; i>0; i--)
+   {
+       #ifdef DEBUG
+           printf("i: %d, freeing extension\n", i);
+       #endif
+       free(Output_file[i].extension);
+       if (Output_file[i].on)  
+       {
+           #ifdef DEBUG
+               printf("i: %d, freeing filename\n", i);
+           #endif
+           free(Output_file[i].filename);
+       }
+   }  /* for i */
+   #ifdef DEBUG
+       printf("Done loop.  Freeing Output_File\n");
+   #endif
    free(Output_file);
 
    printf(" End of run %d\n", Run_num);
