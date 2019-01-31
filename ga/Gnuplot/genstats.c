@@ -134,7 +134,7 @@ int main(int argc, char **argv)
    fprintf(fp, "set xlabel \"Generation\"\n");
    fprintf(fp, "set ylabel \"Fitness\"\n");
    fprintf(fp, "#set title \"Run %d: Parent source\"\n\n", run_num);
-   fprintf(fp, "splot \\\n");
+   fprintf(fp, "splot [][0:] \\\n");
    fprintf(fp, "   \"%s\" using 1:2:3 with points palette pointsize 0.2 pointtype 5\n",
            datafile);
 
