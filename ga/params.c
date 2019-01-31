@@ -174,6 +174,9 @@ int set_param(char *aline)
    else if (!strcmp(name, "Random_immigrants"))
                 sscanf(temp, "%d", &Random_immigrants);
    else if (!strcmp(name, "RI_interval"))  sscanf(temp, "%d", &RI_interval);
+   else if (!strcmp(name, "Mass_extinction"))
+                sscanf(temp, "%d", &Mass_extinction);
+   else if (!strcmp(name, "ME_interval"))  sscanf(temp, "%d", &ME_interval);
    else if (!strcmp(name, "Print_params"))  sscanf(temp, "%d", &Print_params);
    else if (!strcmp(name, "Print_function"))  sscanf(temp,"%d",&Print_function);
    else if (!strcmp(name, "Print_pop"))  sscanf(temp, "%d", &Print_pop);
@@ -189,9 +192,13 @@ int set_param(char *aline)
 
    // make sure random immigrant size is valid
    if (Random_immigrants > Pop_size-Elite)  Random_immigrants = Pop_size-Elite;
+   // make sure mass extinction size is valid
+   if (Mass_extinction > Pop_size-Elite)  Mass_extinction = Pop_size-Elite;
 
    // make sure RI interval is greater than or equal to 1.  Defaults to 1.
    if (RI_interval <= 0)  RI_interval = 1;
+   // make sure ME interval is greater than or equal to 1.  Defaults to 1.
+   if (ME_interval <= 0)  ME_interval = 1;
 
 #ifdef DEBUG
    printf(" ---end set_param()---\n");

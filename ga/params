@@ -6,7 +6,7 @@ Output_path		Output
 Pop_size		500
 Init_pop		2
 Loop_until_find_opt	0
-Max_num_gen		5000
+Max_num_gen		200
 Min_pct_opt		0.5
 # fitness metric: 0 = distance, 1 = time
 Metric          0
@@ -19,7 +19,7 @@ Parsimony_pressure	0
 #reproduction
 Parent_selection	tournament
 Parent_replacement_on   1
-Tournament_size		4 
+Tournament_size		2
 Uniform_x		0.2
 #mutation
 Gaussian_sd     0.25
@@ -34,5 +34,7 @@ Print_best		    1
 Print_fxn_best		0
 Scientific_notation 	0
 Elite			1
-Random_immigrants	75
+Random_immigrants	50
 RI_interval		1
+Mass_extinction		400
+ME_interval		45

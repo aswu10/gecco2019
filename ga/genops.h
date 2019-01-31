@@ -7,6 +7,7 @@
 /* prototypes */
 int crossover_pop();
 void mutate_pop();
+int poisson(double lambda);
 void onept_crossover(INDIVIDUAL *parent1, INDIVIDUAL *parent2,
 			INDIVIDUAL *kid1, INDIVIDUAL *kid2);
 void twopt_crossover(INDIVIDUAL *parent1, INDIVIDUAL *parent2,

@@ -59,10 +59,18 @@ Print_pop		0
 Print_best		0
 # 1/8/19 flag for elitism, if 1 save best indv, if 0 no elitism
 Elite			0
-# 1/18/19 indicates the number of random immigrants to include in population
+# 1/18/19.AW indicates the number of random immigrants to include in population
 # in each generation.  User must ensure that it is not set higher than pop size.
+# 1/29/19.AW Code does check that # RI is not more than Pop_size-1 if Elite is 
+# on and Pop_size if Elite is off.
 # RI_interval indicates the interval at which random immigrants occur.
 # Defaults to 1 (every generation) if an invalid number is specified.
 Random_immigrants	0
-RI_interval		1
+RI_interval		1000
+# 1/29/19.AW indicates interval at which mass extinction occurs and the number
+# (not percent) of individuals to kill off in a mass extinction.
+# User should ensure that the number killed off is less than population size.
+# ME_interval defaults to 1 (every gen) if invalid (neg.) value is specified.
+Mass_extinction		0
+ME_interval		1000
 # one last comment

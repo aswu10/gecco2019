@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/utsname.h>
+#include <string.h>
 
 int main(int argc, char **argv)
    {
@@ -26,6 +28,8 @@ int main(int argc, char **argv)
    sscanf(argv[2], "%d", &display);
    printf(" Display plot flag: %d\n", display);
 
+/////// plot *.genstats data
+
    // open file to print to
    sprintf(gnuplotfile, "genstats.gnu");
    fp = fopen(gnuplotfile, "w");
@@ -39,11 +43,11 @@ int main(int argc, char **argv)
    sprintf(file_with_plot, "run.%d.genstats.eps", run_num);
 
    // create gnuplot file
-   fprintf(fp, "set term post eps\n");
+   fprintf(fp, "set term post eps color\n");
    fprintf(fp, "set output \"%s\"\n", file_with_plot);
    fprintf(fp, "set xlabel \"Generation\"\n");
    fprintf(fp, "set ylabel \"Fitness\"\n");
-   fprintf(fp, "set title \"Run %d\"\n\n", run_num);
+   fprintf(fp, "set title \"Run %d: Population fitness\"\n\n", run_num);
    fprintf(fp, "plot \\\n");
    fprintf(fp, "   \"%s\" using 1:7 title \"Best fitness\" w line,\\\n",
            datafile);
@@ -54,10 +58,95 @@ int main(int argc, char **argv)
 
    fclose(fp);
 
+   struct utsname uname_data;
+   uname(&uname_data);
+
    system("gnuplot genstats.gnu");
    if (display)
       {
-      sprintf(systemcmd, "open %s", file_with_plot);
+      if (strcmp(uname_data.sysname, "Linux") == 0)
+         sprintf(systemcmd, "xdg-open %s", file_with_plot);
+      else
+         sprintf(systemcmd, "open %s", file_with_plot);
+      system(systemcmd);
+      }
+
+/////// plot *.genparents data
+
+   // open file to print to
+   sprintf(gnuplotfile, "genparents.gnu");
+   fp = fopen(gnuplotfile, "w");
+
+   // save path to input data file (file of data to plot)
+   sprintf(datafile, "../Output/run.%d/run.%d.genparents",
+           run_num, run_num);
+   printf(" Datafile: %s\n", datafile);
+
+   // name of output file with plot
+   sprintf(file_with_plot, "run.%d.genparents.eps", run_num);
+
+   // create gnuplot file
+   fprintf(fp, "set term post eps color\n");
+   fprintf(fp, "set output \"%s\"\n", file_with_plot);
+   fprintf(fp, "set xlabel \"Generation\"\n");
+   fprintf(fp, "set ylabel \"Percent of population\"\n");
+   fprintf(fp, "set title \"Run %d: Parent source\"\n\n", run_num);
+   fprintf(fp, "plot \\\n");
+   fprintf(fp, "   \"%s\" using 1:4 title \"Percent elite parents\" w line,\\\n",
+           datafile);
+   fprintf(fp, "   \"%s\" using 1:10 title \"Percent RI parents\" w line,\\\n",
+           datafile);
+   fprintf(fp, "   \"%s\" using 1:7 title \"Percent other parents\" w line\n",
+           datafile);
+
+   fclose(fp);
+
+   system("gnuplot genparents.gnu");
+   if (display)
+      {
+      if (strcmp(uname_data.sysname, "Linux") == 0)
+         sprintf(systemcmd, "xdg-open %s", file_with_plot);
+      else
+         sprintf(systemcmd, "open %s", file_with_plot);
+      system(systemcmd);
+      }
+
+/////// plot *.genparentheatmap data
+
+   // open file to print to
+   sprintf(gnuplotfile, "genparentheatmap.gnu");
+   fp = fopen(gnuplotfile, "w");
+
+   // save path to input data file (file of data to plot)
+   sprintf(datafile, "../Output/run.%d/run.%d.genparentheatmap",
+           run_num, run_num);
+   printf(" Datafile: %s\n", datafile);
+
+   // name of output file with plot
+   sprintf(file_with_plot, "run.%d.genparentheatmap.eps", run_num);
+
+   // create gnuplot file
+   fprintf(fp, "set term post eps color\n");
+   fprintf(fp, "set view map\n");
+   fprintf(fp, "set palette gray\n");
+   fprintf(fp, "set palette negative\n");
+   fprintf(fp, "set output \"%s\"\n", file_with_plot);
+   fprintf(fp, "set xlabel \"Generation\"\n");
+   fprintf(fp, "set ylabel \"Fitness\"\n");
+   fprintf(fp, "#set title \"Run %d: Parent source\"\n\n", run_num);
+   fprintf(fp, "splot [][0:] \\\n");
+   fprintf(fp, "   \"%s\" using 1:2:3 with points palette pointsize 0.2 pointtype 5\n",
+           datafile);
+
+   fclose(fp);
+
+   system("gnuplot genparentheatmap.gnu");
+   if (display)
+      {
+      if (strcmp(uname_data.sysname, "Linux") == 0)
+         sprintf(systemcmd, "xdg-open %s", file_with_plot);
+      else
+         sprintf(systemcmd, "open %s", file_with_plot);
       system(systemcmd);
       }
 

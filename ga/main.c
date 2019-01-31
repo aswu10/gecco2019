@@ -54,11 +54,13 @@ main(int argc, char **argv)
    printf(" opfiles file: %s\n", argv[2]);
    printf(" function file: %s\n", argv[3]);
  
-  /* get start time */
-   tstart = (time_t *)malloc(sizeof(time_t));
-   time(tstart);
-   strftime(time_string, 99, " %m/%d/%y  %H:%M:%S ", localtime(tstart)); 
-   printf(" Start time: %s\n", time_string);
+// 19.01.30.AW Time collection moved into ga_start() in ga.c so that
+// we can print out the time in an output file.
+//  /* get start time */
+//   tstart = (time_t *)malloc(sizeof(time_t));
+//   time(tstart);
+//   strftime(time_string, 99, " %m/%d/%y  %H:%M:%S ", localtime(tstart)); 
+//   printf(" Start time: %s\n", time_string);
 
 
   /* start the ga -- this is a separate function call to make
@@ -68,15 +70,17 @@ main(int argc, char **argv)
    if (error == -1)  printf(" Error(main): ga_start ends on error.\n");
    else              printf(" --- ga_start ends ok. ---\n");
 
-  /* get end time */
-   tend = (time_t *)malloc(sizeof(time_t));
-   time(tend);
-   strftime(time_string, 99, " %m/%d/%y  %H:%M:%S ", localtime(tend));
-   printf(" End time: %s\n", time_string);
+// 19.01.30.AW Time collection moved into ga_start() in ga.c so that
+// we can print out the time in an output file.
+//  /* get end time */
+//   tend = (time_t *)malloc(sizeof(time_t));
+//   time(tend);
+//   strftime(time_string, 99, " %m/%d/%y  %H:%M:%S ", localtime(tend));
+//   printf(" End time: %s\n", time_string);
 
   /* Added on 1.19.96 AW */
-   free(tstart);
-   free(tend);
+//   free(tstart);
+//   free(tend);
 
    return OK;
    }  /* main */

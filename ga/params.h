@@ -13,3 +13,4 @@ int read_default_opfiles(char *opfiles_file);
 int read_opfiles(char *opfiles_file);
 int get_file_pointer(char *extension);
 int setup_output_files();
+int file_on(char *extension);

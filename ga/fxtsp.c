@@ -34,6 +34,8 @@
 #include <unistd.h>
 #include "types.h"
 #include "extern.h"
+#include "params.h"
+#include "output.h"
 #include "google_call.h"
 #include "fxtsp.h"
 
@@ -362,11 +364,12 @@ void end_function()
     
    // deallocate the dist_matrix
    free_matrix();
-   printf("   deallocated dist_matrix and time_matrix\n\n");
+   printf("   deallocated dist_matrix and time_matrix\n");
     
    // deallocate dist_time
    free(dist_time);
-    
+   printf("   deallocated dist_time pointer\n\n");
+ 
 #ifdef DEBUG
    printf(" ---end end_function---\n");
 #endif

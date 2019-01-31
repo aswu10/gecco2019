@@ -9,16 +9,20 @@
 		select_parents()		07.24.98.AW
 		select_p_with_replacement()	07.24.98.AW
 		select_p_without_replacement()	07.24.98.AW
+		track_parents()			01.30.19.AW
 */
 
 #include <stdio.h>
+#include <string.h>
+#include <float.h>
 #include "types.h"
 #include "extern.h"
 #include "reproduce.h"
 #include "util.h"
 #include "random.h"
 #include "genops.h"
-#include <float.h>
+#include "indv.h"
+#include "fxtsp.h"
 
 /********** reproduce **********/
 /* parameters:
@@ -50,6 +54,9 @@ int reproduce()
 
   /* select parents */
    if (select_parents() == ERROR)  return ERROR;
+
+  /* track where parents are from: elite, RI, or other */
+   if (track_parents() == ERROR)  return ERROR;
     
 #ifdef SMALLSTEP
    printf(" gen %d, after selecting parents.  Selected parents:\n",
@@ -82,6 +89,7 @@ int reproduce()
       {
       //printf(" Save elite in gen %d\n", Gen.index);
       copy_indv(Pop[Gen.best_indv_index], Kids[0]);
+      Kids[0]->index = 0;
       }
 
   /* if Random_immigrants > 0, generate random immigrants starting at the
@@ -91,6 +99,24 @@ int reproduce()
       if (Random_immigrants > 0)
          {
          for (i=Pop_size-1; i>=Pop_size-Random_immigrants; i--)
+            {
+            for (g=Kids[i]->length-1; g>=0; g--)
+               {
+               Kids[i]->floats_genome[g] = funiform(1);
+               }
+            decode(Kids[i]);
+            }
+         }
+      }
+
+  /* if Mass_extinction > 0, implement mass extinction starting at the
+     bottom of the population, e.g. starting at slot Pop_size -1 */
+  /* ME overwrites the RI individuals */
+   if (Gen.index % ME_interval == 0)
+      {
+      if (Mass_extinction > 0)
+         {
+         for (i=Pop_size-1; i>=Pop_size-Mass_extinction; i--)
             {
             for (g=Kids[i]->length-1; g>=0; g--)
                {
@@ -343,3 +369,44 @@ void tournament_selection()
 #endif
    }  /* tournament_selection */
 
+/********** track_parents **********/
+/* parameters:
+   called by:   reproduce(), reproduce.c
+   actions:     Ror each generation, records the number of parents
+		that were the elite individual from the last generation,
+		that were selected from the random immigrants from the last
+		generation, and all other parents.
+*/
+int track_parents()
+   {
+   int i;
+#ifdef DEBUG
+   printf(" ---in track_parents()---\n");
+#endif
+
+   // track data for genparents file
+   for (i=0; i<Pop_size; i++)
+      {
+      if (Parents[i]->index == 0)
+         Gen.elite_parent_count++;
+      else if (Parents[i]->index >=Pop_size-Random_immigrants)
+         Gen.ri_parent_count++;
+      else
+         Gen.other_parent_count++;
+      }
+
+   // data for genparentheatmap file
+   if (file_on("genparentheatmap"))
+      {
+      for (i=0; i<Pop_size; i++)
+         {
+         Gen.parent_count[Parents[i]->index].count++;
+         Gen.parent_count[Parents[i]->index].fitness = Parents[i]->fitness;
+         }
+      }
+
+#ifdef DEBUG
+   printf(" ---end track_parents()---\n");
+#endif
+   return OK;
+   }  /* track_parents */
