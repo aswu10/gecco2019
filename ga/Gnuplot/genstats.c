@@ -26,6 +26,8 @@ int main(int argc, char **argv)
    sscanf(argv[2], "%d", &display);
    printf(" Display plot flag: %d\n", display);
 
+/////// plot *.genstats data
+
    // open file to print to
    sprintf(gnuplotfile, "genstats.gnu");
    fp = fopen(gnuplotfile, "w");
@@ -39,11 +41,11 @@ int main(int argc, char **argv)
    sprintf(file_with_plot, "run.%d.genstats.eps", run_num);
 
    // create gnuplot file
-   fprintf(fp, "set term post eps\n");
+   fprintf(fp, "set term post eps color\n");
    fprintf(fp, "set output \"%s\"\n", file_with_plot);
    fprintf(fp, "set xlabel \"Generation\"\n");
    fprintf(fp, "set ylabel \"Fitness\"\n");
-   fprintf(fp, "set title \"Run %d\"\n\n", run_num);
+   fprintf(fp, "set title \"Run %d: Population fitness\"\n\n", run_num);
    fprintf(fp, "plot \\\n");
    fprintf(fp, "   \"%s\" using 1:7 title \"Best fitness\" w line,\\\n",
            datafile);
@@ -55,6 +57,43 @@ int main(int argc, char **argv)
    fclose(fp);
 
    system("gnuplot genstats.gnu");
+   if (display)
+      {
+      sprintf(systemcmd, "open %s", file_with_plot);
+      system(systemcmd);
+      }
+
+/////// plot *.parents data
+
+   // open file to print to
+   sprintf(gnuplotfile, "parents.gnu");
+   fp = fopen(gnuplotfile, "w");
+
+   // save path to input data file (file of data to plot)
+   sprintf(datafile, "../Output/run.%d/run.%d.parents",
+           run_num, run_num);
+   printf(" Datafile: %s\n", datafile);
+
+   // name of output file with plot
+   sprintf(file_with_plot, "run.%d.parents.eps", run_num);
+
+   // create gnuplot file
+   fprintf(fp, "set term post eps color\n");
+   fprintf(fp, "set output \"%s\"\n", file_with_plot);
+   fprintf(fp, "set xlabel \"Generation\"\n");
+   fprintf(fp, "set ylabel \"Percent of population\"\n");
+   fprintf(fp, "set title \"Run %d: Parent source\"\n\n", run_num);
+   fprintf(fp, "plot \\\n");
+   fprintf(fp, "   \"%s\" using 1:4 title \"Percent elite parents\" w line,\\\n",
+           datafile);
+   fprintf(fp, "   \"%s\" using 1:10 title \"Percent RI parents\" w line,\\\n",
+           datafile);
+   fprintf(fp, "   \"%s\" using 1:7 title \"Percent other parents\" w line\n",
+           datafile);
+
+   fclose(fp);
+
+   system("gnuplot parents.gnu");
    if (display)
       {
       sprintf(systemcmd, "open %s", file_with_plot);

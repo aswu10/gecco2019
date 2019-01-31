@@ -385,6 +385,21 @@ void gen_output()
 		Pop[Gen.shortest_index]->raw_fitness);
       fclose(Output_file[array_ptr].fp);
       }  /* if lenstats */
+   if (file_on("parents"))
+      {
+      array_ptr = get_file_pointer("parents");
+      Output_file[array_ptr].fp = fopen(Output_file[array_ptr].filename, "a");
+      fprintf(Output_file[array_ptr].fp, 
+              " %4d   elite %4d %lf   other %4d %lf   ri %4d %lf\n",
+              Gen.index, 
+              Gen.elite_parent_count,
+              (double)Gen.elite_parent_count/(double)Pop_size*100.0,
+              Gen.other_parent_count,
+              (double)Gen.other_parent_count/(double)Pop_size*100.0,
+              Gen.ri_parent_count,
+              (double)Gen.ri_parent_count/(double)Pop_size*100.0);
+      fclose(Output_file[array_ptr].fp);
+      }  /* if parents */
 
 
 #ifdef DEBUG

@@ -3,10 +3,10 @@
 Rerun			-1
 Output_path		Output
 # starting and stopping
-Pop_size		1000
+Pop_size		200
 Init_pop		2
 Loop_until_find_opt	0
-Max_num_gen		2000
+Max_num_gen		1000
 Min_pct_opt		0.5
 # fitness metric: 0 = distance, 1 = time
 Metric          0
@@ -34,7 +34,7 @@ Print_best		    1
 Print_fxn_best		0
 Scientific_notation 	0
 Elite			1
-Random_immigrants	100
+Random_immigrants	40
 RI_interval		1
-Mass_extinction		500
-ME_interval		200
+Mass_extinction		140
+ME_interval		80

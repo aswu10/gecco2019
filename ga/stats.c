@@ -117,6 +117,11 @@ int gen_start()
    Gen.worst_indv_index = -1;
    Gen.worst_fitness = 0.0;
 
+  /* 19.01.30.AW init counters for tracking parent source */
+   Gen.elite_parent_count = 0;
+   Gen.ri_parent_count = 0;
+   Gen.other_parent_count = 0;
+
 #ifdef DEBUG
    printf(" ---end gen_start---\n");
 #endif

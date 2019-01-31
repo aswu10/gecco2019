@@ -130,16 +130,11 @@ typedef struct
    int longest_index;
    int shortest;
    int shortest_index;
-  /* number of pairs of parents that crossover in gen */
-   int num_x;
-  /* added 11.22.04.AW to count number of times parents mate */
-  /* counts the number of times each individual in the previous */
-  /* generation was a parent for the current generation */
-   int *parent_count;
-  /* added 12.11.04.AW to store probability that an individual will */
-  /* be chosen to be a parent x times, for each x from 0 to population size. */
-  /* array size equal to the population size + 1 */
-   double *count_prob;
+  /* 19.01.30.AW Track the number of times that the elite was selected to
+   be a parent, #times an RI was selected to be a parent, and everyone else */
+   int elite_parent_count;
+   int ri_parent_count;
+   int other_parent_count;
    }  GENERATION;
    
 /********** declarations for floating representations **********/

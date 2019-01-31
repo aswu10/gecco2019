@@ -11,3 +11,4 @@ int select_parents();
 void select_p_with_replacement();
 void select_p_without_replacement();
 void tournament_selection();
+int track_parents();

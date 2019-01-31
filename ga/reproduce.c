@@ -9,6 +9,7 @@
 		select_parents()		07.24.98.AW
 		select_p_with_replacement()	07.24.98.AW
 		select_p_without_replacement()	07.24.98.AW
+		track_parents()			01.30.19.AW
 */
 
 #include <stdio.h>
@@ -53,6 +54,9 @@ int reproduce()
 
   /* select parents */
    if (select_parents() == ERROR)  return ERROR;
+
+  /* track where parents are from: elite, RI, or other */
+   if (track_parents() == ERROR)  return ERROR;
     
 #ifdef SMALLSTEP
    printf(" gen %d, after selecting parents.  Selected parents:\n",
@@ -85,6 +89,7 @@ int reproduce()
       {
       //printf(" Save elite in gen %d\n", Gen.index);
       copy_indv(Pop[Gen.best_indv_index], Kids[0]);
+      Kids[0]->index = 0;
       }
 
   /* if Random_immigrants > 0, generate random immigrants starting at the
@@ -364,3 +369,33 @@ void tournament_selection()
 #endif
    }  /* tournament_selection */
 
+/********** track_parents **********/
+/* parameters:
+   called by:   reproduce(), reproduce.c
+   actions:     Ror each generation, records the number of parents
+		that were the elite individual from the last generation,
+		that were selected from the random immigrants from the last
+		generation, and all other parents.
+*/
+int track_parents()
+   {
+   int i;
+#ifdef DEBUG
+   printf(" ---in track_parents()---\n");
+#endif
+
+   for (i=0; i<Pop_size; i++)
+      {
+      if (Parents[i]->index == 0)
+         Gen.elite_parent_count++;
+      else if (Parents[i]->index >=Pop_size-Random_immigrants)
+         Gen.ri_parent_count++;
+      else
+         Gen.other_parent_count++;
+      }
+
+#ifdef DEBUG
+   printf(" ---end track_parents()---\n");
+#endif
+   return OK;
+   }  /* track_parents */
