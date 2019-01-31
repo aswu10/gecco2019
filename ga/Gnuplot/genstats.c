@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/utsname.h>
+#include <string.h>
 
 int main(int argc, char **argv)
    {
@@ -56,10 +58,16 @@ int main(int argc, char **argv)
 
    fclose(fp);
 
+   struct utsname uname_data;
+   uname(&uname_data);
+
    system("gnuplot genstats.gnu");
    if (display)
       {
-      sprintf(systemcmd, "open %s", file_with_plot);
+      if (strcmp(uname_data.sysname, "Linux") == 0)
+         sprintf(systemcmd, "xdg-open %s", file_with_plot);
+      else
+         sprintf(systemcmd, "open %s", file_with_plot);
       system(systemcmd);
       }
 
@@ -96,7 +104,10 @@ int main(int argc, char **argv)
    system("gnuplot genparents.gnu");
    if (display)
       {
-      sprintf(systemcmd, "open %s", file_with_plot);
+      if (strcmp(uname_data.sysname, "Linux") == 0)
+         sprintf(systemcmd, "xdg-open %s", file_with_plot);
+      else
+         sprintf(systemcmd, "open %s", file_with_plot);
       system(systemcmd);
       }
 
@@ -132,7 +143,10 @@ int main(int argc, char **argv)
    system("gnuplot genparentheatmap.gnu");
    if (display)
       {
-      sprintf(systemcmd, "open %s", file_with_plot);
+      if (strcmp(uname_data.sysname, "Linux") == 0)
+         sprintf(systemcmd, "xdg-open %s", file_with_plot);
+      else
+         sprintf(systemcmd, "open %s", file_with_plot);
       system(systemcmd);
       }
 
