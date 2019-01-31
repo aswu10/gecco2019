@@ -112,6 +112,13 @@ typedef struct
 /* a population is a list of pointers that point to individuals. */
 typedef INDIVIDUAL **POPULATION;
 
+// structure for saving parent heat map data
+typedef struct
+   {
+   double fitness;
+   int count;
+   } PARENT_COUNT;
+
 /* structure to store data for a generation */
 typedef struct
    {
@@ -135,6 +142,8 @@ typedef struct
    int elite_parent_count;
    int ri_parent_count;
    int other_parent_count;
+  /* 19.01.30.AW Track the number of times each parent selected per gen */
+   PARENT_COUNT *parent_count;
    }  GENERATION;
    
 /********** declarations for floating representations **********/
@@ -190,6 +199,6 @@ typedef struct
    double key;
    int value;
    } KEY_MAP;
-   
+
 /********** function related structures and definitions **********/
 #include "fxtypes.h"

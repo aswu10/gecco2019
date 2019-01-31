@@ -384,6 +384,7 @@ int track_parents()
    printf(" ---in track_parents()---\n");
 #endif
 
+   // track data for genparents file
    for (i=0; i<Pop_size; i++)
       {
       if (Parents[i]->index == 0)
@@ -392,6 +393,16 @@ int track_parents()
          Gen.ri_parent_count++;
       else
          Gen.other_parent_count++;
+      }
+
+   // data for genparentheatmap file
+   if (file_on("genparentheatmap"))
+      {
+      for (i=0; i<Pop_size; i++)
+         {
+         Gen.parent_count[Parents[i]->index].count++;
+         Gen.parent_count[Parents[i]->index].fitness = Parents[i]->fitness;
+         }
       }
 
 #ifdef DEBUG

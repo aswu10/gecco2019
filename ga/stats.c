@@ -37,6 +37,7 @@
 int run_start()
    {
    int ptr;
+   int i;
 
 #ifdef DEBUG
    printf(" ---in run_start---\n");
@@ -51,6 +52,13 @@ int run_start()
    Gen.best_fitness = 0.0;
    Gen.worst_indv_index = -1;
    Gen.worst_fitness = 0.0;
+
+   Gen.parent_count = (PARENT_COUNT *)malloc(Pop_size * sizeof(PARENT_COUNT));
+   for (i=0; i<Pop_size; i++)
+      {
+      Gen.parent_count[i].fitness = -1.0;
+      Gen.parent_count[i].count = 0;
+      }
 
   /* initialize best individual of run */
    if (init_run_best_indv() == ERROR)  return ERROR;
@@ -101,6 +109,7 @@ int run_end()
 */
 int gen_start()
    {
+   int i;
 #ifdef DEBUG
    printf(" ---in gen_start---\n");
 #endif
@@ -121,6 +130,14 @@ int gen_start()
    Gen.elite_parent_count = 0;
    Gen.ri_parent_count = 0;
    Gen.other_parent_count = 0;
+   if (file_on("genparentheatmap"))
+      {
+      for (i=0; i<Pop_size; i++)
+         {
+         Gen.parent_count[i].fitness = -1.0;
+         Gen.parent_count[i].count = 0.0;
+         }
+      }
 
 #ifdef DEBUG
    printf(" ---end gen_start---\n");

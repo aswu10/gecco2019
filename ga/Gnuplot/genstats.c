@@ -63,19 +63,19 @@ int main(int argc, char **argv)
       system(systemcmd);
       }
 
-/////// plot *.parents data
+/////// plot *.genparents data
 
    // open file to print to
-   sprintf(gnuplotfile, "parents.gnu");
+   sprintf(gnuplotfile, "genparents.gnu");
    fp = fopen(gnuplotfile, "w");
 
    // save path to input data file (file of data to plot)
-   sprintf(datafile, "../Output/run.%d/run.%d.parents",
+   sprintf(datafile, "../Output/run.%d/run.%d.genparents",
            run_num, run_num);
    printf(" Datafile: %s\n", datafile);
 
    // name of output file with plot
-   sprintf(file_with_plot, "run.%d.parents.eps", run_num);
+   sprintf(file_with_plot, "run.%d.genparents.eps", run_num);
 
    // create gnuplot file
    fprintf(fp, "set term post eps color\n");
@@ -93,7 +93,43 @@ int main(int argc, char **argv)
 
    fclose(fp);
 
-   system("gnuplot parents.gnu");
+   system("gnuplot genparents.gnu");
+   if (display)
+      {
+      sprintf(systemcmd, "open %s", file_with_plot);
+      system(systemcmd);
+      }
+
+/////// plot *.genparentheatmap data
+
+   // open file to print to
+   sprintf(gnuplotfile, "genparentheatmap.gnu");
+   fp = fopen(gnuplotfile, "w");
+
+   // save path to input data file (file of data to plot)
+   sprintf(datafile, "../Output/run.%d/run.%d.genparentheatmap",
+           run_num, run_num);
+   printf(" Datafile: %s\n", datafile);
+
+   // name of output file with plot
+   sprintf(file_with_plot, "run.%d.genparentheatmap.eps", run_num);
+
+   // create gnuplot file
+   fprintf(fp, "set term post eps color\n");
+   fprintf(fp, "set view map\n");
+   fprintf(fp, "set palette gray\n");
+   fprintf(fp, "set palette negative\n");
+   fprintf(fp, "set output \"%s\"\n", file_with_plot);
+   fprintf(fp, "set xlabel \"Generation\"\n");
+   fprintf(fp, "set ylabel \"Fitness\"\n");
+   fprintf(fp, "#set title \"Run %d: Parent source\"\n\n", run_num);
+   fprintf(fp, "splot \\\n");
+   fprintf(fp, "   \"%s\" using 1:2:3 with points palette pointsize 0.2 pointtype 5\n",
+           datafile);
+
+   fclose(fp);
+
+   system("gnuplot genparentheatmap.gnu");
    if (display)
       {
       sprintf(systemcmd, "open %s", file_with_plot);

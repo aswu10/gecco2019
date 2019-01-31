@@ -318,6 +318,7 @@ void fprint_gen_best(FILE *fp)
 void gen_output()
    {
    int array_ptr;
+   int i;
 
 #ifdef DEBUG
    printf(" ---in gen_output---\n");
@@ -385,9 +386,9 @@ void gen_output()
 		Pop[Gen.shortest_index]->raw_fitness);
       fclose(Output_file[array_ptr].fp);
       }  /* if lenstats */
-   if (file_on("parents"))
+   if (file_on("genparents"))
       {
-      array_ptr = get_file_pointer("parents");
+      array_ptr = get_file_pointer("genparents");
       Output_file[array_ptr].fp = fopen(Output_file[array_ptr].filename, "a");
       fprintf(Output_file[array_ptr].fp, 
               " %4d   elite %4d %lf   other %4d %lf   ri %4d %lf\n",
@@ -399,7 +400,18 @@ void gen_output()
               Gen.ri_parent_count,
               (double)Gen.ri_parent_count/(double)Pop_size*100.0);
       fclose(Output_file[array_ptr].fp);
-      }  /* if parents */
+      }  /* if genparents */
+   if (file_on("genparentheatmap"))
+      {
+      array_ptr = get_file_pointer("genparentheatmap");
+      Output_file[array_ptr].fp = fopen(Output_file[array_ptr].filename, "a");
+      for (i=0; i<Pop_size; i++)
+         {
+         fprintf(Output_file[array_ptr].fp, " %4d %lf %d\n", Gen.index, 
+              Gen.parent_count[i].fitness, Gen.parent_count[i].count);
+         }
+      fclose(Output_file[array_ptr].fp);
+      }  /* if genparentheatmap */
 
 
 #ifdef DEBUG

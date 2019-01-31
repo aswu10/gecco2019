@@ -6,4 +6,5 @@ runbest 1
 genstats 1
 lenstats 1
 time	1
-parents	1
+genparents	1
+genparentheatmap 1
